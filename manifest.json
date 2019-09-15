@@ -1,0 +1,18 @@
+{
+  "name": "PhotOSINT",
+  "version": "0.0.2",
+  "description": "OSINT tool for images",
+  "manifest_version": 2,
+  "background": {
+    "scripts": ["scripts/background.js"],
+    "persistent": false
+  },
+  "permissions": ["storage", "activeTab"],
+  "options_page": "",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["scripts/exif.js", "scripts/content.js"]
+    }
+  ]
+}
