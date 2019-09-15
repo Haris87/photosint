@@ -14,5 +14,6 @@
       "matches": ["<all_urls>"],
       "js": ["scripts/exif.js", "scripts/content.js"]
     }
-  ]
+  ],
+  "content_security_policy": "script-src 'self'; object-src 'self'; img-src * data: blob: 'unsafe-inline'; default-src *  data: blob: 'unsafe-inline' 'unsafe-eval'; connect-src * data: blob: 'unsafe-inline';"
 }
