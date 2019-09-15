@@ -1044,13 +1044,21 @@
     EXIF.isXmpEnabled = false;
   };
 
-  EXIF.getData = function(img, callback) {
+  EXIF.getData = function(img, callback, errorCallback) {
     if (
       ((self.Image && img instanceof self.Image) ||
         (self.HTMLImageElement && img instanceof self.HTMLImageElement)) &&
       !img.complete
-    )
-      return false;
+    ) {
+      img.onload = function() {
+        EXIF.getData(img, callback, errorCallback);
+      };
+      // console.warn("Unable to get EXIF, image complete: ", img.complete);
+      // if (errorCallback) {
+      //   errorCallback({ complete: img.complete });
+      // }
+      // return false;
+    }
 
     if (!imageHasData(img)) {
       getImageData(img, callback);

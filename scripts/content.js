@@ -2,7 +2,7 @@
 const targetNode = document.getElementsByTagName("body")[0];
 
 // Options for the observer (which mutations to observe)
-const config = { attributes: false, childList: true, subtree: true };
+const config = { attributes: true, childList: true, subtree: true };
 
 // Create an observer instance linked to the callback function
 const observer = new MutationObserver(mutationCallback);
@@ -16,11 +16,19 @@ function checkImages(element) {
   const images = element.getElementsByTagName("img");
   console.log("checking " + images.length + " images...");
   for (let image of images) {
-    if (!image.classList.contains(exif_checked)) {
-      image.style = "filter: grayscale(0) sepia(0);";
-      image.style = "border: 6px dashed pink;";
+    if (image.complete) {
       extractExifData(image);
+    } else {
+      image.addEventListener("load", function() {
+        console.log("THIS", this, image);
+        extractExifData(this);
+      });
     }
+
+    // if (!image.classList.contains(exif_checked)) {
+    //   image.style = "filter: grayscale(0) sepia(0);";
+    //   // image.style = "border: 6px dashed pink;";
+    // }
   }
 }
 checkImages(document);
@@ -33,7 +41,8 @@ function extractExifData(image) {
     if (isEmpty(allMetaData)) {
       image.style = "filter: grayscale(1);";
     } else {
-      image.style = "filter: sepia(1);";
+      // image.style = "filter: sepia(1);";
+      image.classList.add("has_exif");
       image.onclick = function(ev) {
         ev.preventDefault();
         ev.stopPropagation();
