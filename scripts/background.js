@@ -1,1 +1,1 @@
-alert("background");
+console.log("background");
