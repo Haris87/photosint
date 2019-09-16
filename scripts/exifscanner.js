@@ -9,9 +9,6 @@ const observer = new MutationObserver(mutationCallback);
 
 observer.observe(targetNode, config);
 
-// class to add to elements that where already checked
-const exif_checked = "exif_checked";
-
 function checkImages(element) {
   const images = element.getElementsByTagName("img");
   for (let image of images) {
@@ -30,22 +27,41 @@ checkImages(document);
 
 function extractExifData(image) {
   EXIF.getData(image, function() {
-    var allMetaData = EXIF.getAllTags(image);
-    // image.parentNode.classList.add(exif_checked);
-    image.classList.add(exif_checked);
+    var metadata = EXIF.getAllTags(image);
 
-    if (isEmpty(allMetaData)) {
+    // image.parentNode.classList.add(exif_checked);
+    image.classList.add("exif_checked");
+
+    if (isEmpty(metadata)) {
       // image.parentNode.classList.add("no_exif");
-      image.classList.add("no_exif");
+      image.classList.add("no_exif_metadata");
+    } else if (hasGPSMetadata(metadata)) {
+      image.classList.add("gps_metadata");
     } else {
-      // image.parentNode.classList.add("has_exif");
-      image.classList.add("has_exif");
+      // image.parentNode.classList.add("exif_metadata");
+      image.classList.add("exif_metadata");
 
       image.onmouseenter = function(ev) {
-        console.log(allMetaData);
+        console.log(metadata);
       };
     }
   });
+}
+
+function hasGPSMetadata(metadata) {
+  return (
+    metadata.hasOwnProperty("GPSAltitude") ||
+    metadata.hasOwnProperty("GPSAltitudeRef") ||
+    metadata.hasOwnProperty("GPSDateStamp") ||
+    metadata.hasOwnProperty("GPSImgDirection") ||
+    metadata.hasOwnProperty("GPSImgDirectionRef") ||
+    metadata.hasOwnProperty("GPSInfoIFDPointer") ||
+    metadata.hasOwnProperty("GPSLatitude") ||
+    metadata.hasOwnProperty("GPSLatitudeRef") ||
+    metadata.hasOwnProperty("GPSLongitude") ||
+    metadata.hasOwnProperty("GPSLongitudeRef") ||
+    metadata.hasOwnProperty("GPSTimeStamp")
+  );
 }
 
 function isEmpty(obj) {

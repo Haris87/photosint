@@ -1,10 +1,12 @@
-.no_exif,
-.has_exif {
+.no_exif_metadata,
+.exif_metadata,
+.gps_metadata {
   position: relative !important;
   transition: filter 0.2s ease-in-out;
 }
 
-.has_exif:before {
+/* 
+.exif_metadata:before {
   content: "EXIF";
   font-family: "Arial Black";
   position: absolute;
@@ -22,22 +24,41 @@
   transition: opacity 0.2s ease-in-out;
 }
 
-.has_exif:before:hover {
+.exif_metadata:before:hover {
   opacity: 0;
-}
+} 
+*/
 
-.has_exif {
+.exif_metadata {
   filter: sepia(1);
 }
 
-.no_exif {
+.no_exif_metadata {
   filter: grayscale(1);
 }
 
-.has_exif:hover {
+.exif_metadata:hover {
   filter: sepia(0);
 }
 
-.no_exif:hover {
+.no_exif_metadata:hover {
   filter: grayscale(0);
+}
+
+.gps_metadata {
+  animation: brightness 1.5s infinite;
+}
+
+.gps_metadata:hover {
+  animation: none;
+}
+
+@keyframes brightness {
+  0%,
+  100% {
+    -webkit-filter: brightness(none);
+  }
+  50% {
+    -webkit-filter: brightness(2);
+  }
 }
