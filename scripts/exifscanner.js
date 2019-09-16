@@ -23,10 +23,7 @@ function checkImages(element) {
       });
     }
 
-    // if (!image.classList.contains(exif_checked)) {
-    //   image.style = "filter: grayscale(0) sepia(0);";
-    //   // image.style = "border: 6px dashed pink;";
-    // }
+    // loading(image)
   }
 }
 checkImages(document);
@@ -34,18 +31,18 @@ checkImages(document);
 function extractExifData(image) {
   EXIF.getData(image, function() {
     var allMetaData = EXIF.getAllTags(image);
+    // image.parentNode.classList.add(exif_checked);
     image.classList.add(exif_checked);
-    image.style = "border: 0px";
+
     if (isEmpty(allMetaData)) {
-      image.style = "filter: grayscale(1);";
+      // image.parentNode.classList.add("no_exif");
+      image.classList.add("no_exif");
     } else {
-      // image.style = "filter: sepia(1);";
+      // image.parentNode.classList.add("has_exif");
       image.classList.add("has_exif");
-      image.onclick = function(ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
+
+      image.onmouseenter = function(ev) {
         console.log(allMetaData);
-        alert(JSON.stringify(allMetaData));
       };
     }
   });

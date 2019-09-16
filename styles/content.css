@@ -1,19 +1,43 @@
-img.no_exif {
-  filter: grayscale(1);
+.no_exif,
+.has_exif {
+  position: relative !important;
+  transition: filter 0.2s ease-in-out;
 }
 
-img.has_exif {
+.has_exif:before {
+  content: "EXIF";
+  font-family: "Arial Black";
+  position: absolute;
+  font-size: 12px;
+  line-height: 18px;
+
+  font-weight: bolder;
+  padding: 3px;
+  border-bottom-right-radius: 3px;
+  top: 0px;
+  left: 0px;
+  background-color: orange;
+  color: black;
+  display: inline-block;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.has_exif:before:hover {
+  opacity: 0;
+}
+
+.has_exif {
   filter: sepia(1);
 }
 
-img.has_exif:before {
-  content: "EXIF";
-  display: inline-block;
-  background-color: red;
-  color: white;
-  font-weight: bold;
-  font-size: 13px;
-  border-radius: 3px;
-  width: 50px;
-  height: 15px;
+.no_exif {
+  filter: grayscale(1);
+}
+
+.has_exif:hover {
+  filter: sepia(0);
+}
+
+.no_exif:hover {
+  filter: grayscale(0);
 }

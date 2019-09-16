@@ -20,6 +20,12 @@ function reverseImageSearchBing(info, tab) {
   });
 }
 
+function toMetadataViewer(info, tab) {
+  chrome.tabs.create({
+    url: "https://metadataviewer.herokuapp.com/?img=" + info.srcUrl
+  });
+}
+
 function reverseImageSearchAll(info, tab) {
   reverseImageSearchBing(info, tab);
   reverseImageSearchYandex(info, tab);
@@ -30,6 +36,12 @@ chrome.contextMenus.create({
   title: "Reverse image search (all)",
   contexts: ["image"],
   onclick: reverseImageSearchAll
+});
+
+chrome.contextMenus.create({
+  title: "Send to Metadata Viewer",
+  contexts: ["image"],
+  onclick: toMetadataViewer
 });
 
 /*
