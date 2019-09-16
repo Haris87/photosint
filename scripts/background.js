@@ -20,6 +20,19 @@ function reverseImageSearchBing(info, tab) {
   });
 }
 
+function reverseImageSearchAll(info, tab) {
+  reverseImageSearchBing(info, tab);
+  reverseImageSearchYandex(info, tab);
+  reverseImageSearchGoogle(info, tab);
+}
+
+chrome.contextMenus.create({
+  title: "Reverse image search (all)",
+  contexts: ["image"],
+  onclick: reverseImageSearchAll
+});
+
+/*
 chrome.contextMenus.create({
   title: "Reverse image search in Google",
   contexts: ["image"],
@@ -37,3 +50,4 @@ chrome.contextMenus.create({
   contexts: ["image"],
   onclick: reverseImageSearchBing
 });
+*/
