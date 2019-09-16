@@ -14,13 +14,11 @@ const exif_checked = "exif_checked";
 
 function checkImages(element) {
   const images = element.getElementsByTagName("img");
-  console.log("checking " + images.length + " images...");
   for (let image of images) {
     if (image.complete) {
       extractExifData(image);
     } else {
       image.addEventListener("load", function() {
-        console.log("THIS", this, image);
         extractExifData(this);
       });
     }
@@ -64,9 +62,7 @@ function mutationCallback(mutationsList, observer) {
     if (mutation.type === "childList") {
       var newElement = mutation.target;
       var newImages = newElement.getElementsByTagName("img");
-      console.log("mutation. images: ", newImages.length);
       if (newImages.length > 0) {
-        console.log("SHOULD CHECK");
         shouldCheck = true;
         break;
       }
@@ -74,7 +70,6 @@ function mutationCallback(mutationsList, observer) {
   }
 
   if (shouldCheck) {
-    console.log("new images");
     checkImages(document);
     shouldCheck = false;
   }
