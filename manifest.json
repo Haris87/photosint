@@ -1,18 +1,22 @@
 {
   "name": "PhotOSINT",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "OSINT tool for images",
   "manifest_version": 2,
   "background": {
     "scripts": ["scripts/background.js"],
     "persistent": false
   },
-  "permissions": ["storage", "activeTab"],
+  "permissions": ["storage", "activeTab", "contextMenus"],
   "options_page": "",
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["scripts/exif.js", "scripts/content.js"],
+      "js": [
+        "scripts/exif.js",
+        "scripts/exifscanner.js",
+        "scripts/contextmenu.js"
+      ],
       "css": ["styles/content.css"]
     }
   ],
