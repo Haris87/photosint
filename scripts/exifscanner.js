@@ -12,18 +12,28 @@ observer.observe(targetNode, config);
 function checkImages(element) {
   const images = element.getElementsByTagName('img');
   for (let image of images) {
-    // extractExifData(this);
-    extractAndShowExifData(image);
-    if (!image.complete) {
-      image.addEventListener('load', function() {
-        // extractExifData(this);
-        extractAndShowExifData(this);
-      });
-    }
+    // extractAndShowExifData(image);
+    // console.log(image.alt, image.src);
+    // if (image.src == 'https://s.nbst.gr/files/1/2019/07/2170889-353x221.jpg') {
+    //   console.log('GIANNAKOPOULOS');
+    // }
+    checkImage(image);
 
     // loading(image)
   }
 }
+
+function checkImage(image) {
+  if (!image.complete) {
+    image.addEventListener('load', function() {
+      extractExifData(this);
+      // extractAndShowExifData(this);
+    });
+  } else {
+    extractExifData(image);
+  }
+}
+
 checkImages(document);
 
 function extractExifData(image) {
@@ -160,8 +170,10 @@ function isEmpty(obj) {
 }
 
 // Callback function to execute when mutations are observed
+let shown = false;
 function mutationCallback(mutationsList, observer) {
   let shouldCheck = false;
+
   for (let mutation of mutationsList) {
     if (mutation.type === 'childList') {
       var newElement = mutation.target;
@@ -169,6 +181,16 @@ function mutationCallback(mutationsList, observer) {
       if (newImages.length > 0) {
         shouldCheck = true;
         break;
+      }
+    } else if (mutation.type === 'attributes') {
+      if (
+        mutation.target.tagName === 'IMG' &&
+        mutation.attributeName === 'src' &&
+        !shown
+      ) {
+        if (!shown) console.log(mutation.target.alt, mutation.target.src);
+        shown = true;
+        checkImage(mutation.target);
       }
     }
   }
