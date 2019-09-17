@@ -12,13 +12,12 @@ observer.observe(targetNode, config);
 function checkImages(element) {
   const images = element.getElementsByTagName('img');
   for (let image of images) {
-    if (image.complete) {
-      extractExifData(image);
-      // extractAndShowExifData(image);
-    } else {
+    // extractExifData(this);
+    extractAndShowExifData(image);
+    if (!image.complete) {
       image.addEventListener('load', function() {
-        extractExifData(this);
-        // extractAndShowExifData(this);
+        // extractExifData(this);
+        extractAndShowExifData(this);
       });
     }
 
@@ -31,14 +30,16 @@ function extractExifData(image) {
   EXIF.getData(image, function() {
     var metadata = EXIF.getAllTags(image);
 
-    image.classList.add('exif_checked');
+    // image.classList.add('exif_checked');
 
     if (isEmpty(metadata)) {
       image.classList.add('no_exif_metadata');
-    } else if (hasGPSMetadata(metadata)) {
-      image.classList.add('gps_metadata');
     } else {
       image.classList.add('exif_metadata');
+
+      if (hasGPSMetadata(metadata)) {
+        image.classList.add('gps_metadata');
+      }
 
       image.onmouseenter = function(ev) {
         console.log(metadata);
@@ -51,18 +52,74 @@ function extractAndShowExifData(image) {
   EXIF.getData(image, function() {
     var metadata = EXIF.getAllTags(image);
 
-    image.parentNode.classList.add('show_exif_checked');
-    if (isEmpty(metadata)) {
-      image.parentNode.classList.add('show_no_exif_metadata');
-    } else if (hasGPSMetadata(metadata)) {
-      image.classList.add('show_gps_metadata');
-    } else {
-      image.parentNode.classList.add('show_exif_metadata');
+    var parent = !!image.parentNode ? image.parentNode : image;
+    // image.classList.add('exif_checked');
+
+    if (!isEmpty(metadata)) {
+      parent.classList.add('show_exif_metadata');
+      parent.setAttribute('data-exif', createMetadataSummary(metadata));
+
+      if (hasGPSMetadata(metadata)) {
+        parent.classList.add('show_gps_metadata');
+        parent.setAttribute('data-gps', createGPSSummary(metadata));
+      }
+
+      // if (hasGPSMetadata(metadata)) {
+      //   parent.classList.add('show_gps_metadata');
+      // }
+
       image.onmouseenter = function(ev) {
         console.log(metadata);
       };
     }
   });
+}
+
+function createMetadataSummary(metadata) {
+  var metaString = '';
+
+  metaString += hasCameraMetadata(metadata)
+    ? (metadata.Make || '' + ' ' + metadata.Model || '') + ', '
+    : '';
+  metaString += hasDateMetadata(metadata)
+    ? (metadata.DateTime ||
+        metadata.DateTimeDigitized ||
+        metadata.DateTimeOriginal) + ', '
+    : '';
+
+  metaString += hasCopyrightMetadata(metadata) ? '© ' + metadata.Copyright : '';
+
+  return metaString;
+}
+
+function createGPSSummary(metadata) {
+  var metaStringArray = [];
+
+  if (metadata.hasOwnProperty('GPSAltitude')) {
+    metaStringArray.push('Alt: ' + metadata.GPSAltitude);
+  }
+
+  if (metadata.hasOwnProperty('GPSImgDirection')) {
+    metaStringArray.push('Dir: ' + metadata.GPSImgDirection);
+  }
+
+  if (metadata.hasOwnProperty('GPSInfoIFDPointer')) {
+    metaStringArray.push('ID pointer: ' + metadata.GPSInfoIFDPointer);
+  }
+
+  if (metadata.hasOwnProperty('GPSPosition')) {
+    metaStringArray.push('Lat Long: ' + metadata.GPSPosition);
+    metaString += metadata.GPSPosition;
+  } else if (
+    metadata.hasOwnProperty('GPSLatitude') &&
+    metadata.hasOwnProperty('GPSLongitude')
+  ) {
+    metaStringArray.push(
+      'Lat Long: ' + metadata.GPSLatitude + ' ' + metadata.GPSLongitude
+    );
+  }
+
+  return metaStringArray.join(', ');
 }
 
 function hasGPSMetadata(metadata) {
@@ -77,8 +134,25 @@ function hasGPSMetadata(metadata) {
     metadata.hasOwnProperty('GPSLatitudeRef') ||
     metadata.hasOwnProperty('GPSLongitude') ||
     metadata.hasOwnProperty('GPSLongitudeRef') ||
-    metadata.hasOwnProperty('GPSTimeStamp')
+    metadata.hasOwnProperty('GPSTimeStamp') ||
+    metadata.hasOwnProperty('GPSPosition')
   );
+}
+
+function hasCameraMetadata(metadata) {
+  return metadata.hasOwnProperty('Make') || metadata.hasOwnProperty('Model');
+}
+
+function hasDateMetadata(metadata) {
+  return (
+    metadata.hasOwnProperty('DateTime') ||
+    metadata.hasOwnProperty('DateTimeDigitized') ||
+    metadata.hasOwnProperty('DateTimeOriginal')
+  );
+}
+
+function hasCopyrightMetadata(metadata) {
+  return metadata.hasOwnProperty('Copyright');
 }
 
 function isEmpty(obj) {

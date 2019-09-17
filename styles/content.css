@@ -8,24 +8,43 @@
 }
 
 .show_exif_metadata:before {
-  content: 'EXIF';
-  font-family: 'Arial Black';
+  content: attr(data-exif);
+  font-family: 'Arial';
   position: absolute;
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 9px;
+  line-height: 11px;
 
   font-weight: bolder;
   padding: 3px;
   border-bottom-right-radius: 3px;
   top: 0px;
   left: 0px;
-  background-color: orange;
+  background-color: rgba(255, 165, 0, 0.3);
   color: black;
   display: inline-block;
   transition: opacity 0.2s ease-in-out;
 }
 
-.show_exif_metadata:before:hover {
+.show_gps_metadata:after {
+  content: attr(data-gps);
+  font-family: 'Arial';
+  position: absolute;
+  font-size: 9px;
+  line-height: 11px;
+
+  font-weight: bolder;
+  padding: 3px;
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+  top: 17px;
+  left: 0px;
+  background-color: rgba(32, 178, 170, 0.3);
+  color: black;
+  display: inline-block;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.show_exif_metadata:after:hover {
   opacity: 0;
 }
 
@@ -55,19 +74,19 @@
 }
 
 .gps_metadata {
-  animation: brightness 1.5s infinite;
+  animation: sepia 1.5s infinite;
 }
 
 .gps_metadata:hover {
   animation: none;
 }
 
-@keyframes brightness {
+@keyframes sepia {
   0%,
   100% {
-    -webkit-filter: brightness(none);
+    -webkit-filter: sepia(0);
   }
   50% {
-    -webkit-filter: brightness(2);
+    -webkit-filter: sepia(1);
   }
 }
