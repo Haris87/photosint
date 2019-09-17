@@ -9,17 +9,23 @@ const observer = new MutationObserver(mutationCallback);
 
 observer.observe(targetNode, config);
 
-function checkImages(element) {
-  const images = element.getElementsByTagName('img');
-  for (let image of images) {
-    // extractAndShowExifData(image);
-    // console.log(image.alt, image.src);
-    // if (image.src == 'https://s.nbst.gr/files/1/2019/07/2170889-353x221.jpg') {
-    //   console.log('GIANNAKOPOULOS');
-    // }
-    checkImage(image);
+function checkImages(nodes) {
+  if (
+    NodeList.prototype.isPrototypeOf(nodes) ||
+    HTMLCollection.prototype.isPrototypeOf(nodes)
+  ) {
+    for (let image of nodes) {
+      // extractAndShowExifData(image);
+      // console.log(image.alt, image.src);
+      // if (image.src == 'https://s.nbst.gr/files/1/2019/07/2170889-353x221.jpg') {
+      //   console.log('GIANNAKOPOULOS');
+      // }
+      checkImage(image);
 
-    // loading(image)
+      // loading(image)
+    }
+  } else if (HTMLElement.prototype.isPrototypeOf(nodes)) {
+    checkImage(nodes);
   }
 }
 
@@ -34,7 +40,12 @@ function checkImage(image) {
   }
 }
 
-checkImages(document);
+function init() {
+  setTimeout(function() {
+    checkImages(document.querySelector('img:not(.exif_metadata)'));
+  }, 1000);
+}
+init();
 
 function extractExifData(image) {
   EXIF.getData(image, function() {
@@ -185,10 +196,9 @@ function mutationCallback(mutationsList, observer) {
     } else if (mutation.type === 'attributes') {
       if (
         mutation.target.tagName === 'IMG' &&
-        mutation.attributeName === 'src' &&
-        !shown
+        mutation.attributeName === 'src'
       ) {
-        if (!shown) console.log(mutation.target.alt, mutation.target.src);
+        if (!shown) console.log(mutation.target.alt, mutation);
         shown = true;
         checkImage(mutation.target);
       }
@@ -196,7 +206,7 @@ function mutationCallback(mutationsList, observer) {
   }
 
   if (shouldCheck) {
-    checkImages(document);
+    checkImages(document.querySelector('img:not(.exif_metadata)'));
     shouldCheck = false;
   }
 }
