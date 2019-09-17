@@ -9,6 +9,4 @@ Also gives context options for reverse image search in different search engines.
 ### TODO
 
 - fix bug where EXIF.geData does not respond anything (example: google images and then scroll down)
-- show some exif data on top of elements
-- extend to elements with background images
-- add context menu for reverse image searching
+- show some exif data on top of elements, fix UI

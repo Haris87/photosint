@@ -1,14 +1,15 @@
+/**
+ * data
+ */
 .no_exif_metadata,
-.exif_metadata,
-.gps_metadata {
+.show_exif_metadata,
+.show_gps_metadata {
   position: relative !important;
-  transition: filter 0.2s ease-in-out;
 }
 
-/* 
-.exif_metadata:before {
-  content: "EXIF";
-  font-family: "Arial Black";
+.show_exif_metadata:before {
+  content: 'EXIF';
+  font-family: 'Arial Black';
   position: absolute;
   font-size: 12px;
   line-height: 18px;
@@ -24,10 +25,18 @@
   transition: opacity 0.2s ease-in-out;
 }
 
-.exif_metadata:before:hover {
+.show_exif_metadata:before:hover {
   opacity: 0;
-} 
-*/
+}
+
+/**
+ * filters
+ */
+.no_exif_metadata,
+.exif_metadata,
+.gps_metadata {
+  transition: filter 0.2s ease-in-out;
+}
 
 .exif_metadata {
   filter: sepia(1);
