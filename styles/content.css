@@ -57,6 +57,12 @@
   transition: filter 0.2s ease-in-out;
 }
 
+.no_exif_metadata:hover,
+.exif_metadata:hover,
+.gps_metadata:hover {
+  filter: none;
+}
+
 .exif_metadata {
   filter: sepia(1);
 }
@@ -65,28 +71,10 @@
   filter: grayscale(1);
 }
 
-.exif_metadata:hover {
-  filter: sepia(0);
-}
-
-.no_exif_metadata:hover {
-  filter: grayscale(0);
-}
-
 .gps_metadata {
-  animation: sepia 1.5s infinite;
+  filter: sepia(1) hue-rotate(135deg);
 }
 
-.gps_metadata:hover {
-  animation: none;
-}
-
-@keyframes sepia {
-  0%,
-  100% {
-    -webkit-filter: sepia(0);
-  }
-  50% {
-    -webkit-filter: sepia(1);
-  }
+.entered {
+  border: 2px dotted white;
 }

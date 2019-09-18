@@ -1,19 +1,10 @@
-// Select the node that will be observed for mutations
-const targetNode = document.getElementsByTagName('body')[0];
-
-// Options for the observer (which mutations to observe)
-const config = { attributes: true, childList: true, subtree: true };
-
-// Create an observer instance linked to the callback function
-const observer = new MutationObserver(mutationCallback);
-
-observer.observe(targetNode, config);
-
 function checkImages(nodes) {
+  console.log('checking nodes', nodes.length);
   if (
     NodeList.prototype.isPrototypeOf(nodes) ||
     HTMLCollection.prototype.isPrototypeOf(nodes)
   ) {
+    console.log('checking nodes', nodes.length);
     for (let image of nodes) {
       // extractAndShowExifData(image);
       // console.log(image.alt, image.src);
@@ -32,7 +23,7 @@ function checkImages(nodes) {
 function checkImage(image) {
   if (!image.complete) {
     image.addEventListener('load', function() {
-      extractExifData(this);
+      extractExifData(image);
       // extractAndShowExifData(this);
     });
   } else {
@@ -41,32 +32,41 @@ function checkImage(image) {
 }
 
 function init() {
+  console.log('init');
   setTimeout(function() {
-    checkImages(document.querySelector('img:not(.exif_metadata)'));
+    checkImages(document.getElementsByTagName('img'));
   }, 1000);
 }
-init();
+// init();
 
-function extractExifData(image) {
-  EXIF.getData(image, function() {
-    var metadata = EXIF.getAllTags(image);
+function extractExifData(image, callback) {
+  // check image if not already has exif
+  // if (!image.classList.contains('exif_metadata')) {
+  EXIF.getData(
+    image,
+    function() {
+      var metadata = EXIF.getAllTags(image);
 
-    // image.classList.add('exif_checked');
-
-    if (isEmpty(metadata)) {
-      image.classList.add('no_exif_metadata');
-    } else {
-      image.classList.add('exif_metadata');
-
-      if (hasGPSMetadata(metadata)) {
-        image.classList.add('gps_metadata');
+      if (callback) {
+        callback(metadata);
       }
+      // image.classList.add('exif_checked');
 
-      image.onmouseenter = function(ev) {
-        console.log(metadata);
-      };
+      if (isEmpty(metadata)) {
+        image.classList.add('no_exif_metadata');
+      } else {
+        image.classList.add('exif_metadata');
+
+        if (hasGPSMetadata(metadata)) {
+          image.classList.add('gps_metadata');
+        }
+      }
+    },
+    function(err) {
+      console.warn('Exif get data error:', err);
     }
-  });
+  );
+  // }
 }
 
 function extractAndShowExifData(image) {
@@ -88,10 +88,6 @@ function extractAndShowExifData(image) {
       // if (hasGPSMetadata(metadata)) {
       //   parent.classList.add('show_gps_metadata');
       // }
-
-      image.onmouseenter = function(ev) {
-        console.log(metadata);
-      };
     }
   });
 }
@@ -178,35 +174,4 @@ function hasCopyrightMetadata(metadata) {
 
 function isEmpty(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
-}
-
-// Callback function to execute when mutations are observed
-let shown = false;
-function mutationCallback(mutationsList, observer) {
-  let shouldCheck = false;
-
-  for (let mutation of mutationsList) {
-    if (mutation.type === 'childList') {
-      var newElement = mutation.target;
-      var newImages = newElement.getElementsByTagName('img');
-      if (newImages.length > 0) {
-        shouldCheck = true;
-        break;
-      }
-    } else if (mutation.type === 'attributes') {
-      if (
-        mutation.target.tagName === 'IMG' &&
-        mutation.attributeName === 'src'
-      ) {
-        if (!shown) console.log(mutation.target.alt, mutation);
-        shown = true;
-        checkImage(mutation.target);
-      }
-    }
-  }
-
-  if (shouldCheck) {
-    checkImages(document.querySelector('img:not(.exif_metadata)'));
-    shouldCheck = false;
-  }
 }
