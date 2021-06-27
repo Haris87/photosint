@@ -48,7 +48,9 @@ function onSync() {
     chrome.tabs.sendMessage(tabs[0].id, p, function (images) {
       console.log(images);
       images.forEach((image) => {
-        appendCard(image.url, image.metadata);
+        if (document.querySelectorAll(`[src="${image.url}"]`).length == 0) {
+          appendCard(image.url, image.metadata);
+        }
       });
     });
   });
