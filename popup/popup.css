@@ -1,3 +1,7 @@
 body {
   width: 400px;
 }
+
+.img-fluid {
+  min-width: 100%;
+}

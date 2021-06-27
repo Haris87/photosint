@@ -8,13 +8,14 @@ function createCardNode(imgUrl, exif) {
         <div class="col-md-8">
         <div class="card-body">
             <table cellspacing="10" > 
-                <tr><td>URL</td><td>${imgUrl || ""}</td></tr>
                 <tr><td>Make</td><td>${exif.Make || ""}</td></tr>
                 <tr><td>Model</td><td>${exif.Model || ""}</td></tr>
                 <tr><td>Date</td><td>${exif.Date || ""}</td></tr>
-                <tr><td>GPS</td><td>${exif.GPS || ""}</td></tr>
-                <tr><td>Copyright</td><td>${exif.Copyright || ""}</td></tr>
+                <tr><td>GPS (lat,long)</td><td>${exif.GPSLatitude || ""} ${
+    exif.GPSLongitude || ""
+  }</td></tr>
                 <tr><td>Software</td><td>${exif.Software || ""}</td></tr>
+                <tr><td>Copyright</td><td>${exif.Copyright || ""}</td></tr>
             </table>  
         </div>
         </div>
