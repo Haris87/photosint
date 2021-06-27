@@ -73,8 +73,13 @@ function addImage(image) {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  sendResponse(images);
-  images = [];
+  checkImages(document.getElementsByTagName("img")).then((_images) => {
+    images = images.concat(_images);
+
+    sendResponse(images);
+    images = [];
+  });
+
   // Note: Returning true is required here!
   //  ref: http://stackoverflow.com/questions/20077487/chrome-extension-message-passing-response-not-sent
   return true;
