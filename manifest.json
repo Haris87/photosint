@@ -2,12 +2,12 @@
   "name": "PhotOSINT",
   "version": "0.1.3",
   "description": "OSINT tool for images",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "background": {
-    "scripts": ["scripts/background.js"],
-    "persistent": true
+    "service_worker": "background.js"
   },
-  "permissions": ["storage", "activeTab", "contextMenus", "*://*.*"],
+  "permissions": ["storage", "activeTab", "contextMenus"],
+  "host_permissions": ["*://*/*"],
   "options_page": "",
   "content_scripts": [
     {
@@ -21,5 +21,7 @@
       "css": ["styles/content.css"]
     }
   ],
-  "content_security_policy": "script-src 'self'; object-src 'self'; img-src * data: blob: 'unsafe-inline'; default-src *  data: blob: 'unsafe-inline' 'unsafe-eval'; connect-src * data: blob: 'unsafe-inline';"
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; img-src * data: blob: 'unsafe-inline'; default-src *  data: blob: 'unsafe-inline' 'unsafe-eval'; connect-src * data: blob: 'unsafe-inline';"
+  }
 }
