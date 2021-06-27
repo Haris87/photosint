@@ -6,7 +6,7 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["storage", "activeTab", "contextMenus"],
+  "permissions": ["storage", "tabs", "activeTab", "contextMenus"],
   "host_permissions": ["*://*/*"],
   "options_page": "",
   "content_scripts": [

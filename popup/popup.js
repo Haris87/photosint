@@ -30,6 +30,26 @@ appendCard("http://lorempixel.com/400/800/", {});
 appendCard("http://lorempixel.com/500/300/", {});
 appendCard("http://lorempixel.com/900/200/", {});
 
-chrome.runtime.onMessage.addListener((msg, sender) => {
-  console.log("MESSAGE", msg);
-});
+function onSync() {
+  console.log("onSync clicked");
+  const p = { cmd: "any command" };
+  //   chrome.runtime.sendMessage(p, function (response) {
+  //     console.log("message from background:", response);
+  //   });
+
+  // If you want to sendMessage from tab of browser,
+  // use `chrome.tabs.sendMessage()`.
+
+  // Send message from active tab to background:
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, p, function (response) {
+      console.log("message from background:", response);
+    });
+  });
+}
+onSync();
+
+document.getElementById("sync-btn").addEventListener("click", onSync);
+// chrome.storage.onChanged.addListener(function(changes, namespace) {
+
+// })

@@ -51,6 +51,7 @@ function extractExifData(image, callback) {
         callback(metadata);
       }
 
+      sendMessage();
       if (!isEmpty(metadata)) {
         image.classList.add("exif_checked");
         console.log(metadata);
