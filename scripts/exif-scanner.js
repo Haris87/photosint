@@ -60,6 +60,7 @@ function extractExifData(image, callback) {
         // if (hasGPSMetadata(metadata)) {
         //   image.classList.add("gps_metadata");
         // }
+        //TODO: Send image with metadata to popup
       }
     },
     function (err) {
