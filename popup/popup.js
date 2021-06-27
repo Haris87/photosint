@@ -7,11 +7,14 @@ function createCardNode(imgUrl, exif) {
         </div>
         <div class="col-md-8">
         <div class="card-body">
-            <table>
+            <table cellspacing="10" > 
+                <tr><td>URL</td><td>${imgUrl || ""}</td></tr>
                 <tr><td>Make</td><td>${exif.Make || ""}</td></tr>
                 <tr><td>Model</td><td>${exif.Model || ""}</td></tr>
                 <tr><td>Date</td><td>${exif.Date || ""}</td></tr>
                 <tr><td>GPS</td><td>${exif.GPS || ""}</td></tr>
+                <tr><td>Copyright</td><td>${exif.Copyright || ""}</td></tr>
+                <tr><td>Software</td><td>${exif.Software || ""}</td></tr>
             </table>  
         </div>
         </div>
@@ -25,10 +28,10 @@ function appendCard(url, exif) {
   document.getElementById("images").appendChild(card);
 }
 
-appendCard("http://lorempixel.com/500/900/", {});
-appendCard("http://lorempixel.com/400/800/", {});
-appendCard("http://lorempixel.com/500/300/", {});
-appendCard("http://lorempixel.com/900/200/", {});
+// appendCard("http://lorempixel.com/500/900/", {});
+// appendCard("http://lorempixel.com/400/800/", {});
+// appendCard("http://lorempixel.com/500/300/", {});
+// appendCard("http://lorempixel.com/900/200/", {});
 
 function onSync() {
   console.log("onSync clicked");
@@ -42,8 +45,11 @@ function onSync() {
 
   // Send message from active tab to background:
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, p, function (response) {
-      console.log("message from background:", response);
+    chrome.tabs.sendMessage(tabs[0].id, p, function (images) {
+      console.log(images);
+      images.forEach((image) => {
+        appendCard(image.url, image.metadata);
+      });
     });
   });
 }

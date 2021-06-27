@@ -73,21 +73,7 @@
 
 .gps_metadata {
   filter: sepia(1) hue-rotate(135deg);
-  content: "Test";
-
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
 }
-
-.gps_metadata::after {
-  content: "Test after";
-}
-
-.gps_metadata::before {
-  content: "Test before";
-}
-
 .entered {
   /* border: 2px dotted white; */
 }

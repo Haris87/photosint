@@ -1,9 +1,9 @@
-(function() {
+(function () {
   var debug = false;
 
   var root = this;
 
-  var EXIF = function(obj) {
+  var EXIF = function (obj) {
     if (obj instanceof EXIF) return obj;
     if (!(this instanceof EXIF)) return new EXIF(obj);
     this.EXIFwrapped = obj;
@@ -90,7 +90,7 @@
 
     // other tags
     0xa005: "InteroperabilityIFDPointer",
-    0xa420: "ImageUniqueID" // Identifier assigned uniquely to each image
+    0xa420: "ImageUniqueID", // Identifier assigned uniquely to each image
   });
 
   var TiffTags = (EXIF.TiffTags = {
@@ -126,7 +126,7 @@
     0x0110: "Model",
     0x0131: "Software",
     0x013b: "Artist",
-    0x8298: "Copyright"
+    0x8298: "Copyright",
   });
 
   var GPSTags = (EXIF.GPSTags = {
@@ -160,7 +160,7 @@
     0x001b: "GPSProcessingMethod",
     0x001c: "GPSAreaInformation",
     0x001d: "GPSDateStamp",
-    0x001e: "GPSDifferential"
+    0x001e: "GPSDifferential",
   });
 
   // EXIF 2.3 Spec
@@ -184,7 +184,7 @@
     0x0211: "YCbCrCoefficients",
     0x0212: "YCbCrSubSampling",
     0x0213: "YCbCrPositioning",
-    0x0214: "ReferenceBlackWhite"
+    0x0214: "ReferenceBlackWhite",
   });
 
   var StringValues = (EXIF.StringValues = {
@@ -197,7 +197,7 @@
       5: "Creative program",
       6: "Action program",
       7: "Portrait mode",
-      8: "Landscape mode"
+      8: "Landscape mode",
     },
     MeteringMode: {
       0: "Unknown",
@@ -207,7 +207,7 @@
       4: "MultiSpot",
       5: "Pattern",
       6: "Partial",
-      255: "Other"
+      255: "Other",
     },
     LightSource: {
       0: "Unknown",
@@ -230,7 +230,7 @@
       22: "D75",
       23: "D50",
       24: "ISO studio tungsten",
-      255: "Other"
+      255: "Other",
     },
     Flash: {
       0x0000: "Flash did not fire",
@@ -250,11 +250,15 @@
       0x0045: "Flash fired, red-eye reduction mode, return light not detected",
       0x0047: "Flash fired, red-eye reduction mode, return light detected",
       0x0049: "Flash fired, compulsory flash mode, red-eye reduction mode",
-      0x004d: "Flash fired, compulsory flash mode, red-eye reduction mode, return light not detected",
-      0x004f: "Flash fired, compulsory flash mode, red-eye reduction mode, return light detected",
+      0x004d:
+        "Flash fired, compulsory flash mode, red-eye reduction mode, return light not detected",
+      0x004f:
+        "Flash fired, compulsory flash mode, red-eye reduction mode, return light detected",
       0x0059: "Flash fired, auto mode, red-eye reduction mode",
-      0x005d: "Flash fired, auto mode, return light not detected, red-eye reduction mode",
-      0x005f: "Flash fired, auto mode, return light detected, red-eye reduction mode"
+      0x005d:
+        "Flash fired, auto mode, return light not detected, red-eye reduction mode",
+      0x005f:
+        "Flash fired, auto mode, return light detected, red-eye reduction mode",
     },
     SensingMethod: {
       1: "Not defined",
@@ -263,55 +267,55 @@
       4: "Three-chip color area sensor",
       5: "Color sequential area sensor",
       7: "Trilinear sensor",
-      8: "Color sequential linear sensor"
+      8: "Color sequential linear sensor",
     },
     SceneCaptureType: {
       0: "Standard",
       1: "Landscape",
       2: "Portrait",
-      3: "Night scene"
+      3: "Night scene",
     },
     SceneType: {
-      1: "Directly photographed"
+      1: "Directly photographed",
     },
     CustomRendered: {
       0: "Normal process",
-      1: "Custom process"
+      1: "Custom process",
     },
     WhiteBalance: {
       0: "Auto white balance",
-      1: "Manual white balance"
+      1: "Manual white balance",
     },
     GainControl: {
       0: "None",
       1: "Low gain up",
       2: "High gain up",
       3: "Low gain down",
-      4: "High gain down"
+      4: "High gain down",
     },
     Contrast: {
       0: "Normal",
       1: "Soft",
-      2: "Hard"
+      2: "Hard",
     },
     Saturation: {
       0: "Normal",
       1: "Low saturation",
-      2: "High saturation"
+      2: "High saturation",
     },
     Sharpness: {
       0: "Normal",
       1: "Soft",
-      2: "Hard"
+      2: "Hard",
     },
     SubjectDistanceRange: {
       0: "Unknown",
       1: "Macro",
       2: "Close view",
-      3: "Distant view"
+      3: "Distant view",
     },
     FileSource: {
-      3: "DSC"
+      3: "DSC",
     },
 
     Components: {
@@ -321,8 +325,8 @@
       3: "Cr",
       4: "R",
       5: "G",
-      6: "B"
-    }
+      6: "B",
+    },
   });
 
   function addEvent(element, event, handler) {
@@ -355,7 +359,7 @@
     var http = new XMLHttpRequest();
     http.open("GET", url, true);
     http.responseType = "blob";
-    http.onload = function(e) {
+    http.onload = function (e) {
       if (this.status == 200 || this.status === 0) {
         callback(this.response);
       }
@@ -386,15 +390,15 @@
       } else if (/^blob\:/i.test(img.src)) {
         // Object URL
         var fileReader = new FileReader();
-        fileReader.onload = function(e) {
+        fileReader.onload = function (e) {
           handleBinaryFile(e.target.result);
         };
-        objectURLToBlob(img.src, function(blob) {
+        objectURLToBlob(img.src, function (blob) {
           fileReader.readAsArrayBuffer(blob);
         });
       } else {
         var http = new XMLHttpRequest();
-        http.onload = function() {
+        http.onload = function () {
           if (this.status == 200 || this.status === 0) {
             handleBinaryFile(http.response);
           } else {
@@ -411,7 +415,7 @@
       (img instanceof self.Blob || img instanceof self.File)
     ) {
       var fileReader = new FileReader();
-      fileReader.onload = function(e) {
+      fileReader.onload = function (e) {
         if (debug)
           console.log("Got file of length " + e.target.result.byteLength);
         handleBinaryFile(e.target.result);
@@ -480,7 +484,7 @@
     var offset = 2,
       length = file.byteLength;
 
-    var isFieldSegmentStart = function(dataView, offset) {
+    var isFieldSegmentStart = function (dataView, offset) {
       return (
         dataView.getUint8(offset) === 0x38 &&
         dataView.getUint8(offset + 1) === 0x42 &&
@@ -524,7 +528,7 @@
     0x7a: "captionWriter",
     0x69: "headline",
     0x74: "copyright",
-    0x0f: "category"
+    0x0f: "category",
   };
   function readIPTCData(file, startOffset, sectionLength) {
     var dataView = new DataView(file);
@@ -740,7 +744,7 @@
             thumbTags["blob"] = new Blob(
               [new Uint8Array(dataView.buffer, tOffset, tLength)],
               {
-                type: "image/jpeg"
+                type: "image/jpeg",
               }
             );
           }
@@ -1036,21 +1040,21 @@
     }
   }
 
-  EXIF.enableXmp = function() {
+  EXIF.enableXmp = function () {
     EXIF.isXmpEnabled = true;
   };
 
-  EXIF.disableXmp = function() {
+  EXIF.disableXmp = function () {
     EXIF.isXmpEnabled = false;
   };
 
-  EXIF.getData = function(img, callback, errorCallback) {
+  EXIF.getData = function (img, callback, errorCallback) {
     if (
       ((self.Image && img instanceof self.Image) ||
         (self.HTMLImageElement && img instanceof self.HTMLImageElement)) &&
       !img.complete
     ) {
-      img.onload = function() {
+      img.onload = function () {
         EXIF.getData(img, callback, errorCallback);
       };
       // console.warn("Unable to get EXIF, image complete: ", img.complete);
@@ -1070,17 +1074,17 @@
     return true;
   };
 
-  EXIF.getTag = function(img, tag) {
+  EXIF.getTag = function (img, tag) {
     if (!imageHasData(img)) return;
     return img.exifdata[tag];
   };
 
-  EXIF.getIptcTag = function(img, tag) {
+  EXIF.getIptcTag = function (img, tag) {
     if (!imageHasData(img)) return;
     return img.iptcdata[tag];
   };
 
-  EXIF.getAllTags = function(img) {
+  EXIF.getAllTags = function (img) {
     if (!imageHasData(img)) return {};
     var a,
       data = img.exifdata,
@@ -1093,7 +1097,7 @@
     return tags;
   };
 
-  EXIF.getAllIptcTags = function(img) {
+  EXIF.getAllIptcTags = function (img) {
     if (!imageHasData(img)) return {};
     var a,
       data = img.iptcdata,
@@ -1106,7 +1110,7 @@
     return tags;
   };
 
-  EXIF.pretty = function(img) {
+  EXIF.pretty = function (img) {
     if (!imageHasData(img)) return "";
     var a,
       data = img.exifdata,
@@ -1135,12 +1139,12 @@
     return strPretty;
   };
 
-  EXIF.readFromBinaryFile = function(file) {
+  EXIF.readFromBinaryFile = function (file) {
     return findEXIFinJPEG(file);
   };
 
   if (typeof define === "function" && define.amd) {
-    define("exif-js", [], function() {
+    define("exif-js", [], function () {
       return EXIF;
     });
   }

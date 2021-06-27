@@ -1,34 +1,37 @@
 function checkImages(nodes) {
-  console.log("checking nodes", nodes.length);
-  if (
-    NodeList.prototype.isPrototypeOf(nodes) ||
-    HTMLCollection.prototype.isPrototypeOf(nodes)
-  ) {
+  return new Promise((resolve, reject) => {
     console.log("checking nodes", nodes.length);
-    for (let image of nodes) {
-      // extractAndShowExifData(image);
-      // console.log(image.alt, image.src);
-      // if (image.src == 'https://s.nbst.gr/files/1/2019/07/2170889-353x221.jpg') {
-      //   console.log('GIANNAKOPOULOS');
-      // }
-      checkImage(image);
+    if (
+      NodeList.prototype.isPrototypeOf(nodes) ||
+      HTMLCollection.prototype.isPrototypeOf(nodes)
+    ) {
+      console.log("checking nodes", nodes.length);
+      for (let image of nodes) {
+        // extractAndShowExifData(image);
+        // console.log(image.alt, image.src);
+        // if (image.src == 'https://s.nbst.gr/files/1/2019/07/2170889-353x221.jpg') {
+        //   console.log('GIANNAKOPOULOS');
+        // }
+        checkImage(image).then(resolve);
 
-      // loading(image)
+        // loading(image)
+      }
+    } else if (HTMLElement.prototype.isPrototypeOf(nodes)) {
+      checkImage(nodes).then(resolve);
     }
-  } else if (HTMLElement.prototype.isPrototypeOf(nodes)) {
-    checkImage(nodes);
-  }
+  });
 }
 
 function checkImage(image) {
-  if (!image.complete) {
-    image.addEventListener("load", function () {
-      extractExifData(image);
-      // extractAndShowExifData(this);
-    });
-  } else {
-    extractExifData(image);
-  }
+  return new Promise((resolve, reject) => {
+    if (!image.complete) {
+      image.addEventListener("load", function () {
+        // extractAndShowExifData(this);
+      });
+    } else {
+      extractExifData(image).then(resolve);
+    }
+  });
 }
 
 function init() {
@@ -39,35 +42,39 @@ function init() {
 }
 // init();
 
-function extractExifData(image, callback) {
+function extractExifData(image) {
   // check image if not already has exif
   // if (!image.classList.contains('exif_metadata')) {
-  EXIF.getData(
-    image,
-    function () {
-      var metadata = EXIF.getAllTags(image);
+  return new Promise((resolve, reject) => {
+    EXIF.getData(
+      image,
+      function () {
+        var metadata = EXIF.getAllTags(image);
 
-      if (callback) {
-        callback(metadata);
+        if (!isEmpty(metadata)) {
+          image.classList.add("exif_checked");
+          console.log(metadata);
+
+          //NOTE: this css is for testing
+          image.classList.add("exif_metadata");
+
+          if (hasGPSMetadata(metadata)) {
+            //NOTE: this css is for testing
+            image.classList.add("gps_metadata");
+          }
+
+          resolve({ url: image.src, metadata: metadata });
+        } else {
+          image.classList.add("no_exif_metadata");
+        }
+      },
+      function (err) {
+        console.warn("Exif get data error:", err);
+        reject(err);
       }
+    );
+  });
 
-      sendMessage();
-      if (!isEmpty(metadata)) {
-        image.classList.add("exif_checked");
-        console.log(metadata);
-
-        // image.classList.add("exif_metadata");
-
-        // if (hasGPSMetadata(metadata)) {
-        //   image.classList.add("gps_metadata");
-        // }
-        //TODO: Send image with metadata to popup
-      }
-    },
-    function (err) {
-      console.warn("Exif get data error:", err);
-    }
-  );
   // }
 }
 
