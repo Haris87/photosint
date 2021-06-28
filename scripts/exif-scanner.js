@@ -1,11 +1,11 @@
 function checkImages(nodes) {
   return new Promise((resolve, reject) => {
-    console.log("checking nodes", nodes.length);
+    // console.log("checking nodes", nodes.length);
     if (
       NodeList.prototype.isPrototypeOf(nodes) ||
       HTMLCollection.prototype.isPrototypeOf(nodes)
     ) {
-      console.log("checking nodes", nodes.length);
+      // console.log("checking nodes", nodes.length);
       for (let image of nodes) {
         // extractAndShowExifData(image);
         // console.log(image.alt, image.src);
@@ -35,7 +35,7 @@ function checkImage(image) {
 }
 
 function init() {
-  console.log("init");
+  // console.log("init");
   setTimeout(function () {
     checkImages(document.getElementsByTagName("img"));
   }, 1000);
@@ -53,7 +53,7 @@ function extractExifData(image) {
 
         if (!isEmpty(metadata)) {
           image.classList.add("exif_checked");
-          console.log(metadata);
+          // console.log(metadata);
 
           //NOTE: this css is for testing
           image.classList.add("exif_metadata");

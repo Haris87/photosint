@@ -36,7 +36,6 @@ function mutationCallback(mutationsList, observer) {
 
     checkImages(document.getElementsByTagName("img")).then((_images) => {
       images = images.concat(_images);
-      chrome.action.setBadgeText({ text: images.length });
     });
     shouldCheck = false;
   }
@@ -71,14 +70,24 @@ observer.observe(body, config);
 
 function addImage(image) {
   images.push(image);
-  chrome.action.setBadgeText({ text: images.length });
+}
+
+function removeDuplicateImages() {
+  const urls = [];
+
+  return images.filter((i) => {
+    if (urls.indexOf(i.url) == -1) {
+      urls.push(i.url);
+      return i;
+    }
+  });
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   checkImages(document.getElementsByTagName("img")).then((_images) => {
     images = images.concat(_images);
 
-    sendResponse(images);
+    sendResponse(removeDuplicateImages());
     // images = [];
   });
 

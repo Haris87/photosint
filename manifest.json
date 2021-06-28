@@ -22,7 +22,11 @@
     }
   ],
   "action": {
-    "default_icon": "icons/icon_512.png",
+    "default_icon": {
+      "16": "icons/icon_512.png",
+      "24": "icons/icon_512.png",
+      "32": "icons/icon_512.png"
+    },
     "default_popup": "popup/index.html"
   },
   "content_security_policy": {

@@ -61,3 +61,12 @@ function onClicked(info, tab) {
 
 chrome.runtime.onInstalled.addListener(onInstalled);
 chrome.contextMenus.onClicked.addListener(onClicked);
+
+function showCountOnIcon() {
+  let notifications = 10;
+  chrome.action.setBadgeBackgroundColor({ color: "#F00" }, () => {
+    chrome.action.setBadgeText({ text: String(notifications) });
+  });
+}
+
+showCountOnIcon();
