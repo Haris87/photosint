@@ -25,13 +25,13 @@ function appendCard(url, exif) {
 }
 
 function onSync() {
-  console.log("onSync clicked");
-  const p = { cmd: "any command" };
+  console.log("syncing...");
+  const request = { command: "fetchImages" };
 
   // Send message from active tab to background:
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, p, function (images) {
-      console.log(images);
+    chrome.tabs.sendMessage(tabs[0].id, request, function (images) {
+      console.log("popup got images:", images);
       appendImages(images);
       //   images.forEach((image) => {
       //     if (document.querySelectorAll(`[src="${image.url}"]`).length == 0) {
@@ -58,6 +58,10 @@ function appendImages(_images) {
 /**
  * Check for updates every 2 seconds
  */
-setInterval(onSync, 2000);
+function watcher() {
+  onSync();
+  setInterval(onSync, 2000);
+}
+watcher();
 
 document.getElementById("sync-btn").addEventListener("click", onSync);

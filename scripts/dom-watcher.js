@@ -36,6 +36,7 @@ function mutationCallback(mutationsList, observer) {
 
     checkImages(document.getElementsByTagName("img")).then((_images) => {
       images = images.concat(_images);
+      updateIconNotification();
     });
     shouldCheck = false;
   }
@@ -70,6 +71,7 @@ observer.observe(body, config);
 
 function addImage(image) {
   images.push(image);
+  updateIconNotification();
 }
 
 function removeDuplicateImages() {
@@ -84,14 +86,38 @@ function removeDuplicateImages() {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  console.log("got message from popup", request, sender);
   checkImages(document.getElementsByTagName("img")).then((_images) => {
     images = images.concat(_images);
-
-    sendResponse(removeDuplicateImages());
-    // images = [];
+    updateIconNotification();
+    sendResponse(images);
   });
 
   // Note: Returning true is required here!
   //  ref: http://stackoverflow.com/questions/20077487/chrome-extension-message-passing-response-not-sent
   return true;
+});
+
+function updateIconNotification() {
+  let count = removeDuplicateImages().length;
+  chrome.runtime.sendMessage({ count: String(count) }, function (response) {
+    console.log("response from background:", response);
+  });
+}
+
+function eventImagesLoaded() {
+  return Promise.all(
+    Array.from(document.images)
+      .filter((img) => !img.complete)
+      .map(
+        (img) =>
+          new Promise((resolve) => {
+            img.onload = img.onerror = resolve;
+          })
+      )
+  );
+}
+
+eventImagesLoaded().then(() => {
+  updateIconNotification();
 });

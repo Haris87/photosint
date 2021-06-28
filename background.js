@@ -59,14 +59,23 @@ function onClicked(info, tab) {
   }
 }
 
-chrome.runtime.onInstalled.addListener(onInstalled);
-chrome.contextMenus.onClicked.addListener(onClicked);
-
-function showCountOnIcon() {
-  let notifications = 10;
+function showCountOnIcon(count) {
   chrome.action.setBadgeBackgroundColor({ color: "#F00" }, () => {
-    chrome.action.setBadgeText({ text: String(notifications) });
+    chrome.action.setBadgeText({ text: count > 0 ? String(count) : "" });
   });
 }
 
-showCountOnIcon();
+function onMessage(request, sender, sendResponse) {
+  console.log(
+    sender.tab
+      ? "from a content script:" + sender.tab.url
+      : "from the extension"
+  );
+  // if (request.greeting === "hello") sendResponse({ farewell: "goodbye" });
+  showCountOnIcon(request.count);
+  sendResponse(request.count);
+}
+
+chrome.runtime.onInstalled.addListener(onInstalled);
+chrome.runtime.onMessage.addListener(onMessage);
+chrome.contextMenus.onClicked.addListener(onClicked);
