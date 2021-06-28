@@ -1,26 +1,21 @@
 function createCardNode(imgUrl, exif) {
-  var div = document.createElement("DIV");
-  div.innerHTML = `<div class="card mb-3" style="max-width: 540px;">
+  const div = document.createElement("DIV");
+  let card = `<div class="card mb-3" style="max-width: 540px;">
     <div class="row g-0">
         <div class="col-md-4">
         <img src="${imgUrl}" class="img-fluid rounded-start" alt="...">
         </div>
         <div class="col-md-8">
         <div class="card-body">
-            <table cellspacing="10" > 
-                <tr><td>Make</td><td>${exif.Make || ""}</td></tr>
-                <tr><td>Model</td><td>${exif.Model || ""}</td></tr>
-                <tr><td>Date</td><td>${exif.Date || ""}</td></tr>
-                <tr><td>GPS (lat,long)</td><td>${exif.GPSLatitude || ""} ${
-    exif.GPSLongitude || ""
-  }</td></tr>
-                <tr><td>Software</td><td>${exif.Software || ""}</td></tr>
-                <tr><td>Copyright</td><td>${exif.Copyright || ""}</td></tr>
-            </table>  
-        </div>
-        </div>
-    </div>
-    </div>`;
+            <table cellspacing="10">`;
+
+  for (const key in exif) {
+    card += `<tr><td>${key}</td><td>${JSON.stringify(exif[key])}</td></tr>`;
+  }
+
+  card += `</table></div></div></div></div>`;
+
+  div.innerHTML = card;
   return div.firstChild;
 }
 

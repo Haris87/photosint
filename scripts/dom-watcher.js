@@ -36,6 +36,7 @@ function mutationCallback(mutationsList, observer) {
 
     checkImages(document.getElementsByTagName("img")).then((_images) => {
       images = images.concat(_images);
+      chrome.action.setBadgeText({ text: images.length });
     });
     shouldCheck = false;
   }
@@ -70,6 +71,7 @@ observer.observe(body, config);
 
 function addImage(image) {
   images.push(image);
+  chrome.action.setBadgeText({ text: images.length });
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -77,7 +79,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     images = images.concat(_images);
 
     sendResponse(images);
-    images = [];
+    // images = [];
   });
 
   // Note: Returning true is required here!

@@ -1,7 +1,11 @@
 body {
-  width: 400px;
+  width: 300px;
 }
 
 .img-fluid {
   min-width: 100%;
+}
+
+table {
+  font-size: smaller;
 }
