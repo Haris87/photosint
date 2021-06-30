@@ -1,4 +1,4 @@
-// Select the node that will be observed for mutations
+// The body node will be observed for mutations
 const body = document.getElementsByTagName("body")[0];
 
 let images = [];
@@ -9,7 +9,9 @@ const config = { attributes: true, childList: true, subtree: true };
 // Create an observer instance linked to the callback function
 const observer = new MutationObserver(mutationCallback);
 
-// Callback function to execute when mutations are observed
+/**
+ * Callback function to execute when mutations are observed
+ */
 function mutationCallback(mutationsList, observer) {
   let shouldCheck = false;
 
@@ -32,8 +34,6 @@ function mutationCallback(mutationsList, observer) {
   }
 
   if (shouldCheck) {
-    // checkImages(document.querySelector('img:not(.exif_metadata)'));
-
     checkImages(document.getElementsByTagName("img")).then((_images) => {
       images = images.concat(_images);
       updateIconNotification();
@@ -42,38 +42,35 @@ function mutationCallback(mutationsList, observer) {
   }
 }
 
-// check images when they enter viewport
+/**
+ * Check images when they enter veiwport
+ */
 enterView({
   selector: "img",
   enter: function (el) {
     // console.log("IMAGE ENTERED");
     checkImage(el).then(addImage);
-    el.classList.add("entered");
-
-    // el.addEventListener('mouseenter', function() {
-    //   console.log('mouseenter', el.src);
-    //   extractExifData(el, function(metadata) {
-    //     console.log(metadata);
-    //   });
-    // });
   },
   exit: function (el) {
     // console.log("IMAGE LEFT");
-    // el.classList.remove('entered');
-    // el.classList.remove('exif_metadata');
-    // el.classList.remove('no_exif_metadata');
-    // el.classList.remove('gps_metadata');
   },
 });
 
 // observer body for changes (api calls, lazy load)
 observer.observe(body, config);
 
+/**
+ * Add image to image urls array
+ */
 function addImage(image) {
   images.push(image);
   updateIconNotification();
 }
 
+/**
+ * Removes duplicate urls from images array
+ * @returns
+ */
 function removeDuplicateImages() {
   const urls = [];
 
@@ -85,11 +82,18 @@ function removeDuplicateImages() {
   });
 }
 
+/**
+ * Get requests for images from popup
+ */
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log("got message from popup", request, sender);
   checkImages(document.getElementsByTagName("img")).then((_images) => {
     images = images.concat(_images);
+
+    // notify background about the count change
     updateIconNotification();
+
+    // send requested images to popup
     sendResponse(images);
   });
 
@@ -98,6 +102,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   return true;
 });
 
+/**
+ * Send message to background to update notification count
+ */
 function updateIconNotification() {
   let count = removeDuplicateImages().length;
   chrome.runtime.sendMessage({ count: String(count) }, function (response) {
@@ -105,6 +112,9 @@ function updateIconNotification() {
   });
 }
 
+/**
+ * Event that fires when all images are loaded
+ */
 function eventImagesLoaded() {
   return Promise.all(
     Array.from(document.images)
@@ -118,6 +128,9 @@ function eventImagesLoaded() {
   );
 }
 
+/**
+ * After all images are loaded, update notification count
+ */
 eventImagesLoaded().then(() => {
   updateIconNotification();
 });

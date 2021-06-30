@@ -74,7 +74,6 @@ function onMessage(request, sender, sendResponse) {
       ? "from a content script:" + sender.tab.url
       : "from the extension"
   );
-  // if (request.greeting === "hello") sendResponse({ farewell: "goodbye" });
 
   state[sender.tab.id] = request.count;
 

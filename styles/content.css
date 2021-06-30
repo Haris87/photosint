@@ -74,6 +74,3 @@
 .gps_metadata {
   filter: sepia(1) hue-rotate(135deg);
 }
-.entered {
-  /* border: 2px dotted white; */
-}

@@ -46,33 +46,38 @@ function extractExifData(image) {
   // check image if not already has exif
   // if (!image.classList.contains('exif_metadata')) {
   return new Promise((resolve, reject) => {
-    EXIF.getData(
-      image,
-      function () {
-        var metadata = EXIF.getAllTags(image);
+    try {
+      EXIF.getData(
+        image,
+        function () {
+          var metadata = EXIF.getAllTags(image);
 
-        if (!isEmpty(metadata)) {
-          image.classList.add("exif_checked");
-          // console.log(metadata);
+          if (!isEmpty(metadata)) {
+            image.classList.add("exif_checked");
+            // console.log(metadata);
 
-          //NOTE: this css is for testing
-          image.classList.add("exif_metadata");
-
-          if (hasGPSMetadata(metadata)) {
             //NOTE: this css is for testing
-            image.classList.add("gps_metadata");
-          }
+            image.classList.add("exif_metadata");
 
-          resolve({ url: image.src, metadata: metadata });
-        } else {
-          image.classList.add("no_exif_metadata");
+            if (hasGPSMetadata(metadata)) {
+              //NOTE: this css is for testing
+              image.classList.add("gps_metadata");
+            }
+
+            resolve({ url: image.src, metadata: metadata });
+          } else {
+            image.classList.add("no_exif_metadata");
+          }
+        },
+        function (err) {
+          console.warn("Exif get data error:", err);
+          reject(err);
         }
-      },
-      function (err) {
-        console.warn("Exif get data error:", err);
-        reject(err);
-      }
-    );
+      );
+    } catch (e) {
+      console.warn("Exif get data error:", e);
+      reject(e);
+    }
   });
 
   // }

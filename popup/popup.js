@@ -24,44 +24,42 @@ function appendCard(url, exif) {
   document.getElementById("images").appendChild(card);
 }
 
-function onSync() {
-  console.log("syncing...");
+function onScan() {
+  console.log("scaning...");
   const request = { command: "fetchImages" };
 
-  // Send message from active tab to background:
+  // Send message to content script (dom-watcher):
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     chrome.tabs.sendMessage(tabs[0].id, request, function (images) {
       console.log("popup got images:", images);
       appendImages(images);
-      //   images.forEach((image) => {
-      //     if (document.querySelectorAll(`[src="${image.url}"]`).length == 0) {
-
-      //     }
-      //   });
     });
   });
 }
 
 function appendImages(_images) {
-  _images
-    .filter((i) => {
-      if (urls.indexOf(i.url) == -1) {
-        urls.push(i.url);
-        return i;
-      }
-    })
-    .forEach((i) => {
-      appendCard(i.url, i.metadata);
-    });
+  if (_images) {
+    _images
+      .filter((i) => {
+        if (urls.indexOf(i.url) == -1) {
+          urls.push(i.url);
+          return i;
+        }
+      })
+      .forEach((i) => {
+        appendCard(i.url, i.metadata);
+      });
+  }
 }
 
 /**
  * Check for updates every 2 seconds
  */
+//TODO: find more effective alternative
 function watcher() {
-  onSync();
-  setInterval(onSync, 2000);
+  onScan();
+  setInterval(onScan, 2000);
 }
 watcher();
 
-document.getElementById("sync-btn").addEventListener("click", onSync);
+document.getElementById("scan-btn").addEventListener("click", onScan);

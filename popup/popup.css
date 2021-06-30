@@ -10,3 +10,7 @@ body {
 table {
   font-size: smaller;
 }
+
+#scan-btn {
+  margin-bottom: 10px;
+}
