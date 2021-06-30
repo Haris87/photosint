@@ -1,3 +1,6 @@
+const state = {};
+let currentTab;
+
 function reverseImageSearchGoogle(info, tab) {
   chrome.tabs.create({
     url: "https://images.google.com/searchbyimage?image_url=" + info.srcUrl,
@@ -72,6 +75,9 @@ function onMessage(request, sender, sendResponse) {
       : "from the extension"
   );
   // if (request.greeting === "hello") sendResponse({ farewell: "goodbye" });
+
+  state[sender.tab.id] = request.count;
+
   showCountOnIcon(request.count);
   sendResponse(request.count);
 }
@@ -79,3 +85,11 @@ function onMessage(request, sender, sendResponse) {
 chrome.runtime.onInstalled.addListener(onInstalled);
 chrome.runtime.onMessage.addListener(onMessage);
 chrome.contextMenus.onClicked.addListener(onClicked);
+
+chrome.tabs.onActivated.addListener(function (activeInfo) {
+  const tabCount = state[activeInfo.tabId] || 0;
+  // console.log("change tab", activeInfo.tabId);
+  // console.log("state", state);
+  // console.log("new count", tabCount);
+  showCountOnIcon(tabCount);
+});
