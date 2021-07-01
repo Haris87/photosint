@@ -105,15 +105,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log("got message from popup", request, sender);
   scanImages();
   sendResponse(images);
-  // (_images) => {
-  //   images = images.concat(_images);
-
-  //   // notify background about the count change
-  //   updateIconNotification();
-
-  //   // send requested images to popup
-  //   sendResponse(images);
-  // });
 
   // Note: Returning true is required here!
   //  ref: http://stackoverflow.com/questions/20077487/chrome-extension-message-passing-response-not-sent

@@ -34,14 +34,6 @@ function checkImage(image) {
   });
 }
 
-function init() {
-  // console.log("init");
-  setTimeout(function () {
-    checkImages(document.getElementsByTagName("img"));
-  }, 1000);
-}
-// init();
-
 function extractExifData(image) {
   // check image if not already has exif
   // if (!image.classList.contains('exif_metadata')) {
@@ -53,9 +45,6 @@ function extractExifData(image) {
           var metadata = EXIF.getAllTags(image);
 
           if (!isEmpty(metadata)) {
-            image.classList.add("exif_checked");
-            // console.log(metadata);
-
             //NOTE: this css is for testing
             image.classList.add("exif_metadata");
 
@@ -81,76 +70,6 @@ function extractExifData(image) {
   });
 
   // }
-}
-
-function extractAndShowExifData(image) {
-  EXIF.getData(image, function () {
-    var metadata = EXIF.getAllTags(image);
-
-    var parent = !!image.parentNode ? image.parentNode : image;
-    // image.classList.add('exif_checked');
-
-    if (!isEmpty(metadata)) {
-      parent.classList.add("show_exif_metadata");
-      parent.setAttribute("data-exif", createMetadataSummary(metadata));
-
-      if (hasGPSMetadata(metadata)) {
-        parent.classList.add("show_gps_metadata");
-        parent.setAttribute("data-gps", createGPSSummary(metadata));
-      }
-
-      // if (hasGPSMetadata(metadata)) {
-      //   parent.classList.add('show_gps_metadata');
-      // }
-    }
-  });
-}
-
-function createMetadataSummary(metadata) {
-  var metaString = "";
-
-  metaString += hasCameraMetadata(metadata)
-    ? (metadata.Make || "" + " " + metadata.Model || "") + ", "
-    : "";
-  metaString += hasDateMetadata(metadata)
-    ? (metadata.DateTime ||
-        metadata.DateTimeDigitized ||
-        metadata.DateTimeOriginal) + ", "
-    : "";
-
-  metaString += hasCopyrightMetadata(metadata) ? "© " + metadata.Copyright : "";
-
-  return metaString;
-}
-
-function createGPSSummary(metadata) {
-  var metaStringArray = [];
-
-  if (metadata.hasOwnProperty("GPSAltitude")) {
-    metaStringArray.push("Alt: " + metadata.GPSAltitude);
-  }
-
-  if (metadata.hasOwnProperty("GPSImgDirection")) {
-    metaStringArray.push("Dir: " + metadata.GPSImgDirection);
-  }
-
-  if (metadata.hasOwnProperty("GPSInfoIFDPointer")) {
-    metaStringArray.push("ID pointer: " + metadata.GPSInfoIFDPointer);
-  }
-
-  if (metadata.hasOwnProperty("GPSPosition")) {
-    metaStringArray.push("Lat Long: " + metadata.GPSPosition);
-    metaString += metadata.GPSPosition;
-  } else if (
-    metadata.hasOwnProperty("GPSLatitude") &&
-    metadata.hasOwnProperty("GPSLongitude")
-  ) {
-    metaStringArray.push(
-      "Lat Long: " + metadata.GPSLatitude + " " + metadata.GPSLongitude
-    );
-  }
-
-  return metaStringArray.join(", ");
 }
 
 function hasGPSMetadata(metadata) {
