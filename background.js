@@ -63,8 +63,12 @@ function onClicked(info, tab) {
 }
 
 function showCountOnIcon(count) {
+  let text = count > 0 ? String(count) : "";
+
+  if (count > 10) text = "10+";
+
   chrome.action.setBadgeBackgroundColor({ color: "#F00" }, () => {
-    chrome.action.setBadgeText({ text: count > 0 ? String(count) : "" });
+    chrome.action.setBadgeText({ text: text });
   });
 }
 
