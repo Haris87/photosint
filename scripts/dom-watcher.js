@@ -1,3 +1,22 @@
+class EventEmitter {
+  constructor() {
+    this.callbacks = {};
+  }
+
+  on(event, cb) {
+    if (!this.callbacks[event]) this.callbacks[event] = [];
+    this.callbacks[event].push(cb);
+  }
+
+  emit(event, data) {
+    let cbs = this.callbacks[event];
+    if (cbs) {
+      cbs.forEach((cb) => cb(data));
+    }
+  }
+}
+const target = new EventEmitter();
+
 // The body node will be observed for mutations
 const body = document.getElementsByTagName("body")[0];
 
@@ -34,10 +53,7 @@ function mutationCallback(mutationsList, observer) {
   }
 
   if (shouldCheck) {
-    checkImages(document.getElementsByTagName("img")).then((_images) => {
-      images = images.concat(_images);
-      updateIconNotification();
-    });
+    scanImages();
     shouldCheck = false;
   }
 }
@@ -87,15 +103,17 @@ function removeDuplicateImages() {
  */
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log("got message from popup", request, sender);
-  checkImages(document.getElementsByTagName("img")).then((_images) => {
-    images = images.concat(_images);
+  scanImages();
+  sendResponse(images);
+  // (_images) => {
+  //   images = images.concat(_images);
 
-    // notify background about the count change
-    updateIconNotification();
+  //   // notify background about the count change
+  //   updateIconNotification();
 
-    // send requested images to popup
-    sendResponse(images);
-  });
+  //   // send requested images to popup
+  //   sendResponse(images);
+  // });
 
   // Note: Returning true is required here!
   //  ref: http://stackoverflow.com/questions/20077487/chrome-extension-message-passing-response-not-sent
@@ -133,4 +151,33 @@ function eventImagesLoaded() {
  */
 eventImagesLoaded().then(() => {
   updateIconNotification();
+});
+
+/**
+ * Handle html image nodes
+ */
+function scanImages() {
+  const nodes = document.getElementsByTagName("img");
+  if (
+    NodeList.prototype.isPrototypeOf(nodes) ||
+    HTMLCollection.prototype.isPrototypeOf(nodes)
+  ) {
+    for (let image of nodes) {
+      target.emit("image-found", { node: image });
+    }
+  } else if (HTMLElement.prototype.isPrototypeOf(nodes)) {
+    target.emit("image-found", { node: nodes });
+  }
+}
+
+/**
+ * When image with found, check for EXIF and extract, notify background
+ */
+target.on("image-found", (event) => {
+  console.log("event", event);
+  checkImage(event.node).then((image) => {
+    images.push(image);
+    images = removeDuplicateImages();
+    updateIconNotification();
+  });
 });
