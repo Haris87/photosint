@@ -1,63 +1,4 @@
-/**
- * data
- */
-.no_exif_metadata,
-.show_exif_metadata,
-.show_gps_metadata {
-  position: relative !important;
-}
-
-.show_exif_metadata:before {
-  content: attr(data-exif);
-  font-family: "Arial";
-  position: absolute;
-  font-size: 9px;
-  line-height: 11px;
-
-  font-weight: bolder;
-  padding: 3px;
-  border-bottom-right-radius: 3px;
-  top: 0px;
-  left: 0px;
-  background-color: rgba(255, 165, 0, 0.3);
-  color: black;
-  display: inline-block;
-  transition: opacity 0.2s ease-in-out;
-}
-
-.show_gps_metadata:after {
-  content: attr(data-gps);
-  font-family: "Arial";
-  position: absolute;
-  font-size: 9px;
-  line-height: 11px;
-
-  font-weight: bolder;
-  padding: 3px;
-  border-bottom-right-radius: 3px;
-  border-top-right-radius: 3px;
-  top: 17px;
-  left: 0px;
-  background-color: rgba(32, 178, 170, 0.3);
-  color: black;
-  display: inline-block;
-  transition: opacity 0.2s ease-in-out;
-}
-
-.show_exif_metadata:after:hover {
-  opacity: 0;
-}
-
-/**
- * filters
- */
-.no_exif_metadata,
-.exif_metadata,
-.gps_metadata {
-  transition: filter 0.2s ease-in-out;
-}
-
-.no_exif_metadata:hover,
+/* .no_exif_metadata:hover,
 .exif_metadata:hover,
 .gps_metadata:hover {
   filter: none;
@@ -73,4 +14,4 @@
 
 .gps_metadata {
   filter: sepia(1) hue-rotate(135deg);
-}
+} */
