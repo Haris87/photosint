@@ -1,11 +1,11 @@
 body {
   padding: 10px 5px;
-  width: 300px;
+  width: 500px;
 }
 
-.img-fluid {
+/* .img-fluid {
   min-width: 100%;
-}
+} */
 
 table {
   font-size: smaller;

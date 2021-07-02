@@ -5,15 +5,16 @@ function createCardNode(imgUrl, exif) {
   let card = `<div class="card mb-3" style="max-width: 540px;">
     <div class="row g-0">
         <div class="col-md-4">
-        <img src="${imgUrl}" class="img-fluid rounded-start" alt="...">
+        <img src="${imgUrl}" class="img-fluid rounded mx-auto d-block" alt="..."/>
         </div>
         <div class="col-md-8">
         <div class="card-body">
-            <table cellspacing="10">`;
+          <div class="table-responsive">
+            <table class="table table-striped" cellspacing="10">`;
   for (const key in exif) {
     card += `<tr><td>${key}</td><td>${JSON.stringify(exif[key])}</td></tr>`;
   }
-  card += `</table></div></div></div></div>`;
+  card += `</table></div></div></div></div></div>`;
 
   div.innerHTML = card;
   return div.firstChild;
