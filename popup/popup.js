@@ -2,7 +2,9 @@ const urls = [];
 
 function createCardNode(imgUrl, exif) {
   const div = document.createElement("DIV");
+  const filename = getFilename(imgUrl);
   let card = `<div class="card mb-3" style="max-width: 540px;">
+    <div class="card-header">${filename}</div>
     <div class="row g-0">
         <div class="col-md-4">
         <img src="${imgUrl}" class="img-fluid rounded mx-auto d-block" alt="..."/>
@@ -18,6 +20,21 @@ function createCardNode(imgUrl, exif) {
 
   div.innerHTML = card;
   return div.firstChild;
+}
+
+function getFilename(url) {
+  try {
+    const parts = url.split("/");
+
+    if (parts.length > 0) {
+      const last = parts[parts.length - 1];
+      return last.split("?")[0];
+    } else {
+      return url;
+    }
+  } catch (e) {
+    console.warn(e);
+  }
 }
 
 function appendCard(url, exif) {

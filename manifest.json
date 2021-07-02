@@ -32,7 +32,7 @@
     "24": "icons/icon_24.png",
     "32": "icons/icon_32.png",
     "48": "icons/icon_48.png",
-    "72": "icons/icon_72.png",
+    "64": "icons/icon_64.png",
     "128": "icons/icon_128.png"
   },
   "content_security_policy": {
