@@ -23,9 +23,9 @@
   ],
   "action": {
     "default_icon": {
-      "16": "icons/icon_512.png",
-      "24": "icons/icon_512.png",
-      "32": "icons/icon_512.png"
+      "16": "icons/icon_16.png",
+      "24": "icons/icon_24.png",
+      "32": "icons/icon_32.png"
     },
     "default_popup": "popup/index.html"
   },
