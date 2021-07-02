@@ -11,7 +11,7 @@ function createCardNode(imgUrl, exif) {
         </div>
         <div class="col-md-8">
         <div class="card-body">
-          <div class="table-responsive">
+          <div>
             <table class="table table-striped" cellspacing="10">`;
   for (const key in exif) {
     card += `<tr><td>${key}</td><td>${JSON.stringify(exif[key])}</td></tr>`;

@@ -9,6 +9,11 @@ body {
 
 table {
   font-size: smaller;
+  table-layout: fixed;
+}
+
+td {
+  word-wrap: break-word;
 }
 
 #scan-btn {
