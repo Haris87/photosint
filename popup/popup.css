@@ -16,6 +16,10 @@ td {
   word-wrap: break-word;
 }
 
+.key {
+  font-weight: bold;
+}
+
 #scan-btn {
   margin-bottom: 10px;
 }

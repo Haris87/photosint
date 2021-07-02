@@ -3,8 +3,8 @@ const urls = [];
 function createCardNode(imgUrl, exif) {
   const div = document.createElement("DIV");
   const filename = getFilename(imgUrl);
+  const domain = getDomain(imgUrl);
   let card = `<div class="card mb-3" style="max-width: 540px;">
-    <div class="card-header">${filename}</div>
     <div class="row g-0">
         <div class="col-md-4">
         <img src="${imgUrl}" class="img-fluid rounded mx-auto d-block" alt="..."/>
@@ -12,14 +12,31 @@ function createCardNode(imgUrl, exif) {
         <div class="col-md-8">
         <div class="card-body">
           <div>
-            <table class="table table-striped" cellspacing="10">`;
+            <table class="table table-striped" cellspacing="10">
+              <tr><td class="key">Domain</td><td>${domain}</td></tr>
+              <tr><td class="key">Filename</td><td>${filename}</td></tr>`;
   for (const key in exif) {
-    card += `<tr><td>${key}</td><td>${JSON.stringify(exif[key])}</td></tr>`;
+    card += `<tr><td class="key">${key || ""}</td><td>${JSON.stringify(
+      exif[key]
+    )}</td></tr>`;
   }
   card += `</table></div></div></div></div></div>`;
 
   div.innerHTML = card;
   return div.firstChild;
+}
+
+function getDomain(url) {
+  let hostname;
+  if (url.indexOf("://") > -1) {
+    hostname = url.split("/")[2];
+  } else {
+    hostname = url.split("/")[0];
+  }
+  hostname = hostname.split(":")[0];
+  hostname = hostname.split("?")[0];
+
+  return hostname;
 }
 
 function getFilename(url) {
