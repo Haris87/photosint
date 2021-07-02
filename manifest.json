@@ -1,6 +1,6 @@
 {
   "name": "PhotOSINT",
-  "version": "0.2.1",
+  "version": "0.3.1",
   "description": "OSINT tool for images. Scans current page for images with EXIF metadata and show list in popup window. Also has context menu options for images.",
   "manifest_version": 3,
   "background": {
@@ -23,11 +23,17 @@
   ],
   "action": {
     "default_icon": {
-      "16": "icons/icon_16.png",
-      "24": "icons/icon_24.png",
-      "32": "icons/icon_32.png"
+      "128": "icons/icon_128.png"
     },
-    "default_popup": "popup/index.html"
+    "default_popup": "popup/popup.html"
+  },
+  "icons": {
+    "16": "icons/icon_16.png",
+    "24": "icons/icon_24.png",
+    "32": "icons/icon_32.png",
+    "48": "icons/icon_48.png",
+    "72": "icons/icon_72.png",
+    "128": "icons/icon_128.png"
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'; img-src * data: blob: 'unsafe-inline'; default-src *  data: blob: 'unsafe-inline' 'unsafe-eval'; connect-src * data: blob: 'unsafe-inline';"

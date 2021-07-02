@@ -67,7 +67,7 @@ function showCountOnIcon(count) {
 
   if (count > 10) text = "10+";
 
-  chrome.action.setBadgeBackgroundColor({ color: "#F00" }, () => {
+  chrome.action.setBadgeBackgroundColor({ color: "#09F" }, () => {
     chrome.action.setBadgeText({ text: text });
   });
 }

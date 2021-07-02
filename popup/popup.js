@@ -50,7 +50,12 @@ function appendImages(_images) {
       .forEach((i) => {
         appendCard(i.url, i.metadata);
       });
+    updateCount();
   }
+}
+
+function updateCount() {
+  document.getElementById("count").innerHTML = urls.length;
 }
 
 /**
@@ -62,5 +67,3 @@ function watcher() {
   setInterval(onScan, 2000);
 }
 watcher();
-
-document.getElementById("scan-btn").addEventListener("click", onScan);
