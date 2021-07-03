@@ -53,6 +53,10 @@ function extractExifData(image) {
               image.classList.add("gps_metadata");
             }
 
+            // TODO: Convert to readable string
+            // if (metadata["UserComment"]) {
+            // }
+
             resolve({ url: image.src, metadata: metadata });
           } else {
             image.classList.add("no_exif_metadata");

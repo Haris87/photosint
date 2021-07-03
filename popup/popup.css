@@ -23,3 +23,8 @@ td {
 #scan-btn {
   margin-bottom: 10px;
 }
+
+.map {
+  display: none;
+  height: 180px;
+}

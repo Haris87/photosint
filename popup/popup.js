@@ -4,6 +4,7 @@ function createCardNode(imgUrl, exif) {
   const div = document.createElement("DIV");
   const filename = getFilename(imgUrl);
   const domain = getDomain(imgUrl);
+
   let card = `<div class="card mb-3" style="max-width: 540px;">
     <div class="row g-0">
         <div class="col-md-4">
@@ -20,10 +21,63 @@ function createCardNode(imgUrl, exif) {
       exif[key]
     )}</td></tr>`;
   }
-  card += `</table></div></div></div></div></div>`;
+  card += `</table><div class="map" id="map-${getImageId(
+    imgUrl
+  )}"></div></div></div></div></div></div>`;
 
   div.innerHTML = card;
   return div.firstChild;
+}
+
+function addMap(imgUrl, exif) {
+  if (exif["GPSLongitude"]) {
+    const lat = convertDMSToDD(
+      exif["GPSLatitude"][0],
+      exif["GPSLatitude"][1],
+      exif["GPSLatitude"][2],
+      exif["GPSLatitudeRef"]
+    );
+    const long = convertDMSToDD(
+      exif["GPSLongitude"][0],
+      exif["GPSLongitude"][1],
+      exif["GPSLongitude"][2],
+      exif["GPSLongitudeRef"]
+    );
+    console.log("GPS", lat, long);
+    const mapElements = document.querySelectorAll(".map");
+    for (const mapElement of mapElements) {
+      const id = mapElement.attributes.getNamedItem("id").value;
+      console.log(
+        "GPS",
+        id,
+        "map-" + getImageId(imgUrl),
+        id == "map-" + getImageId(imgUrl)
+      );
+      if (id == "map-" + getImageId(imgUrl)) {
+        mapElement.style = "display: block;";
+        const mymap = L.map(id).setView([lat, long], 7);
+        L.tileLayer(
+          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}",
+          {
+            foo: "bar",
+            attribution:
+              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          }
+        ).addTo(mymap);
+
+        const marker = L.marker([lat, long]).addTo(mymap);
+      }
+    }
+  }
+}
+
+function convertDMSToDD(degrees, minutes, seconds, direction) {
+  var dd = degrees + minutes / 60 + seconds / (60 * 60);
+
+  if (direction == "S" || direction == "W") {
+    dd = dd * -1;
+  } // Don't do anything for N or E
+  return dd;
 }
 
 function getDomain(url) {
@@ -54,9 +108,14 @@ function getFilename(url) {
   }
 }
 
+function getImageId(imgUrl) {
+  return btoa(imgUrl);
+}
+
 function appendCard(url, exif) {
   var card = createCardNode(url, exif);
   document.getElementById("images").appendChild(card);
+  addMap(url, exif);
 }
 
 function onScan() {
