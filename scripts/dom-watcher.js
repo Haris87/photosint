@@ -102,7 +102,7 @@ function removeDuplicateImages() {
  * Get requests for images from popup
  */
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log("got message from popup", request, sender);
+  // console.log("got message from popup", request, sender);
   scanImages();
   sendResponse(images);
 
@@ -117,7 +117,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 function updateIconNotification() {
   let count = removeDuplicateImages().length;
   chrome.runtime.sendMessage({ count: String(count) }, function (response) {
-    console.log("response from background:", response);
+    // console.log("response from background:", response);
   });
 }
 
@@ -165,7 +165,7 @@ function scanImages() {
  * When image with found, check for EXIF and extract, notify background
  */
 target.on("image-found", (event) => {
-  console.log("event", event);
+  // console.log("event", event);
   checkImage(event.node).then((image) => {
     images.push(image);
     images = removeDuplicateImages();

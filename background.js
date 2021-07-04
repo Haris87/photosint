@@ -51,6 +51,8 @@ function onInstalled() {
     contexts: ["image"],
     // onclick: toMetadataViewer,
   });
+
+  // showNotification();
 }
 
 function onClicked(info, tab) {
@@ -83,6 +85,19 @@ function onMessage(request, sender, sendResponse) {
 
   showCountOnIcon(request.count);
   sendResponse(request.count);
+}
+
+function showNotification() {
+  const opt = {
+    iconUrl: "icons/icon_128.png",
+    type: "basic",
+    title: "Images with GPS found",
+    message: "Images with GPS found - message",
+    priority: 1,
+  };
+  chrome.notifications.create("notify1", opt, function () {
+    console.log("created!");
+  });
 }
 
 chrome.runtime.onInstalled.addListener(onInstalled);
