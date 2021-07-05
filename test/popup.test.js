@@ -1,10 +1,14 @@
-const chrome = require("sinon-chrome/extensions");
+const chai = require("chai");
+const expect = chai.expect;
 
-import * as popup from "../popup/popup";
+const chrome = require("sinon-chrome/extensions");
+// import * as popup from "../popup/popup";
+let popup;
 
 describe("popup.js ", () => {
-  beforeAll(() => {
+  before(() => {
     global.chrome = chrome;
+    popup = require("../popup/popup");
   });
 
   beforeEach(() => {
@@ -14,11 +18,11 @@ describe("popup.js ", () => {
   describe("getFilename ", () => {
     it("should return the last part of the URL", () => {
       const url = "https://www.google.com/test/test.jpg";
-      expect(popup.getFilename()).toBe("test.jpg");
+      expect(popup.getFilename(url)).to.equal("test.jpg");
     });
   });
 
-  afterAll(() => {
+  after(() => {
     chrome.flush();
     delete global.chrome;
   });
