@@ -1,19 +1,13 @@
 {
   "name": "PhotOSINT",
-  "version": "0.3.1",
+  "version": "0.3.2.2",
   "description": "OSINT tool for images. Scans page for images with EXIF metadata, while browsing. Also has context menu options for images.",
   "manifest_version": 3,
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": [
-    "storage",
-    "tabs",
-    "activeTab",
-    "contextMenus",
-    "notifications"
-  ],
-  "host_permissions": ["*://*/*"],
+  "permissions": ["tabs", "contextMenus"],
+  "host_permissions": ["https://*/*", "http://*/*"],
   "options_page": "",
   "content_scripts": [
     {
