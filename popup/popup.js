@@ -43,16 +43,11 @@ function addMap(imgUrl, exif) {
       exif["GPSLongitude"][2],
       exif["GPSLongitudeRef"]
     );
-    console.log("GPS", lat, long);
+    // console.log("GPS", lat, long);
     const mapElements = document.querySelectorAll(".map");
     for (const mapElement of mapElements) {
       const id = mapElement.attributes.getNamedItem("id").value;
-      console.log(
-        "GPS",
-        id,
-        "map-" + getImageId(imgUrl),
-        id == "map-" + getImageId(imgUrl)
-      );
+
       if (id == "map-" + getImageId(imgUrl)) {
         mapElement.style = "display: block;";
         const mymap = L.map(id).setView([lat, long], 7);
@@ -119,13 +114,13 @@ function appendCard(url, exif) {
 }
 
 function onScan() {
-  console.log("scaning...");
+  // console.log("scaning...");
   const request = { command: "fetchImages" };
 
   // Send message to content script (dom-watcher):
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     chrome.tabs.sendMessage(tabs[0].id, request, function (images) {
-      console.log("popup got images:", images);
+      // console.log("popup got images:", images);
       appendImages(images);
     });
   });

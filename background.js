@@ -35,9 +35,8 @@ function reverseImageSearchAll(info, tab) {
   reverseImageSearchGoogle(info, tab);
 }
 
-console.log("BG");
 function onInstalled() {
-  console.log("installed");
+  // console.log("installed");
   chrome.contextMenus.create({
     id: "reverse-image-search",
     title: "Reverse image search (Google, Bing, Yandex)",
@@ -56,7 +55,6 @@ function onInstalled() {
 }
 
 function onClicked(info, tab) {
-  console.log(info, tab);
   if (info.menuItemId == "reverse-image-search") {
     reverseImageSearchAll(info, tab);
   } else if (info.menuItemId == "metadata-viewer") {
@@ -64,9 +62,8 @@ function onClicked(info, tab) {
   }
 }
 
-function showCountOnIcon(count) {
+function showNotificationOnIcon(count) {
   let text = count > 0 ? String(count) : "";
-
   if (count > 10) text = "10+";
 
   chrome.action.setBadgeBackgroundColor({ color: "#F90" }, () => {
@@ -75,15 +72,15 @@ function showCountOnIcon(count) {
 }
 
 function onMessage(request, sender, sendResponse) {
-  console.log(
-    sender.tab
-      ? "from a content script:" + sender.tab.url
-      : "from the extension"
-  );
+  // console.log(
+  //   sender.tab
+  //     ? "from a content script:" + sender.tab.url
+  //     : "from the extension"
+  // );
 
   state[sender.tab.id] = request.count;
 
-  showCountOnIcon(request.count);
+  showNotificationOnIcon(request.count);
   sendResponse(request.count);
 }
 
@@ -109,5 +106,5 @@ chrome.tabs.onActivated.addListener(function (activeInfo) {
   // console.log("change tab", activeInfo.tabId);
   // console.log("state", state);
   // console.log("new count", tabCount);
-  showCountOnIcon(tabCount);
+  showNotificationOnIcon(tabCount);
 });
