@@ -1,6 +1,6 @@
 const urls = [];
 
-function createCardNode(imgUrl, exif) {
+export function createCardNode(imgUrl, exif) {
   const div = document.createElement("DIV");
   const filename = getFilename(imgUrl);
   const domain = getDomain(imgUrl);
@@ -29,7 +29,7 @@ function createCardNode(imgUrl, exif) {
   return div.firstChild;
 }
 
-function addMap(imgUrl, exif) {
+export function addMap(imgUrl, exif) {
   if (exif["GPSLongitude"]) {
     const lat = convertDMSToDD(
       exif["GPSLatitude"][0],
@@ -66,7 +66,7 @@ function addMap(imgUrl, exif) {
   }
 }
 
-function convertDMSToDD(degrees, minutes, seconds, direction) {
+export function convertDMSToDD(degrees, minutes, seconds, direction) {
   var dd = degrees + minutes / 60 + seconds / (60 * 60);
 
   if (direction == "S" || direction == "W") {
@@ -75,7 +75,7 @@ function convertDMSToDD(degrees, minutes, seconds, direction) {
   return dd;
 }
 
-function getDomain(url) {
+export function getDomain(url) {
   let hostname;
   if (url.indexOf("://") > -1) {
     hostname = url.split("/")[2];
@@ -88,7 +88,7 @@ function getDomain(url) {
   return hostname;
 }
 
-function getFilename(url) {
+export function getFilename(url) {
   try {
     const parts = url.split("/");
 
@@ -103,17 +103,17 @@ function getFilename(url) {
   }
 }
 
-function getImageId(imgUrl) {
+export function getImageId(imgUrl) {
   return btoa(imgUrl);
 }
 
-function appendCard(url, exif) {
+export function appendCard(url, exif) {
   var card = createCardNode(url, exif);
   document.getElementById("images").appendChild(card);
   addMap(url, exif);
 }
 
-function onScan() {
+export function onScan() {
   // console.log("scaning...");
   const request = { command: "fetchImages" };
 
@@ -126,7 +126,7 @@ function onScan() {
   });
 }
 
-function appendImages(_images) {
+export function appendImages(_images) {
   if (_images) {
     _images
       .filter((i) => {
@@ -142,7 +142,7 @@ function appendImages(_images) {
   }
 }
 
-function updateCount() {
+export function updateCount() {
   document.getElementById("count").innerHTML = urls.length;
 }
 
@@ -150,7 +150,7 @@ function updateCount() {
  * Check for updates every 2 seconds
  */
 //TODO: find more effective alternative
-function watcher() {
+export function watcher() {
   onScan();
   setInterval(onScan, 2000);
 }
