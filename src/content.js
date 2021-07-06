@@ -59,25 +59,6 @@ export function mutationCallback(mutationsList, observer) {
 }
 
 /**
- * Check images when they enter veiwport
- */
-document.getElementsByTagName("body")[0].addEventListener("load", function () {
-  enterView({
-    selector: "img",
-    enter: function (el) {
-      // console.log("IMAGE ENTERED");
-      checkImage(el).then(addImage);
-    },
-    exit: function (el) {
-      // console.log("IMAGE LEFT");
-    },
-  });
-});
-
-// observer body for changes (api calls, lazy load)
-observer.observe(body, config);
-
-/**
  * Add image to image urls array
  */
 export function addImage(image) {
@@ -99,19 +80,6 @@ export function removeDuplicateImages() {
     }
   });
 }
-
-/**
- * Get requests for images from popup
- */
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  // console.log("got message from popup", request, sender);
-  scanImages();
-  sendResponse(images);
-
-  // Note: Returning true is required here!
-  //  ref: http://stackoverflow.com/questions/20077487/chrome-extension-message-passing-response-not-sent
-  return true;
-});
 
 /**
  * Send message to background to update notification count
@@ -140,13 +108,6 @@ export function eventImagesLoaded() {
 }
 
 /**
- * After all images are loaded, update notification count
- */
-eventImagesLoaded().then(() => {
-  updateIconNotification();
-});
-
-/**
  * Handle html image nodes
  */
 export function scanImages() {
@@ -162,18 +123,6 @@ export function scanImages() {
     target.emit("image-found", { node: nodes });
   }
 }
-
-/**
- * When image with found, check for EXIF and extract, notify background
- */
-target.on("image-found", (event) => {
-  // console.log("event", event);
-  checkImage(event.node).then((image) => {
-    images.push(image);
-    images = removeDuplicateImages();
-    updateIconNotification();
-  });
-});
 
 export function checkImages(nodes) {
   return new Promise((resolve, reject) => {
@@ -289,3 +238,56 @@ export function hasCopyrightMetadata(metadata) {
 export function isEmpty(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
+
+/**
+ * Get requests for images from popup
+ */
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  // console.log("got message from popup", request, sender);
+  scanImages();
+  sendResponse(images);
+
+  // Note: Returning true is required here!
+  //  ref: http://stackoverflow.com/questions/20077487/chrome-extension-message-passing-response-not-sent
+  return true;
+});
+
+/**
+ * When image with found, check for EXIF and extract, notify background
+ */
+target.on("image-found", (event) => {
+  // console.log("event", event);
+  checkImage(event.node).then((image) => {
+    images.push(image);
+    images = removeDuplicateImages();
+    updateIconNotification();
+  });
+});
+
+/**
+ * After all images are loaded, update notification count
+ */
+eventImagesLoaded().then(() => {
+  updateIconNotification();
+});
+
+/**
+ * Check images when they enter veiwport
+ */
+document.getElementsByTagName("body")[0].addEventListener("load", function () {
+  enterView({
+    selector: "img",
+    enter: function (el) {
+      // console.log("IMAGE ENTERED");
+      checkImage(el).then(addImage);
+    },
+    exit: function (el) {
+      // console.log("IMAGE LEFT");
+    },
+  });
+});
+
+/**
+ * observe body for changes (api calls, lazy load)
+ */
+observer.observe(body, config);
