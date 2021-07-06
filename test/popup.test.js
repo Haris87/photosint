@@ -8,7 +8,7 @@ let popup;
 describe("popup.js ", () => {
   before(() => {
     global.chrome = chrome;
-    popup = require("../popup/popup");
+    popup = require("../src/popup/popup");
   });
 
   beforeEach(() => {

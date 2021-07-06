@@ -12,28 +12,23 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": [
-        "libs/exif.js",
-        "libs/enter-view.min.js",
-        "scripts/exif-scanner.js",
-        "scripts/dom-watcher.js"
-      ],
-      "css": ["styles/content.css"]
+      "js": ["src/libs/exif.js", "src/libs/enter-view.min.js", "content.js"],
+      "css": ["src/styles/content.css"]
     }
   ],
   "action": {
     "default_icon": {
-      "128": "icons/icon_128.png"
+      "128": "src/icons/icon_128.png"
     },
-    "default_popup": "popup/popup.html"
+    "default_popup": "index.html"
   },
   "icons": {
-    "16": "icons/icon_16.png",
-    "24": "icons/icon_24.png",
-    "32": "icons/icon_32.png",
-    "48": "icons/icon_48.png",
-    "64": "icons/icon_64.png",
-    "128": "icons/icon_128.png"
+    "16": "src/icons/icon_16.png",
+    "24": "src/icons/icon_24.png",
+    "32": "src/icons/icon_32.png",
+    "48": "src/icons/icon_48.png",
+    "64": "src/icons/icon_64.png",
+    "128": "src/icons/icon_128.png"
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'; img-src * data: blob: 'unsafe-inline'; default-src *  data: blob: 'unsafe-inline' 'unsafe-eval'; connect-src * data: blob: 'unsafe-inline';"

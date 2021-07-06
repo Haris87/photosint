@@ -154,4 +154,5 @@ export function watcher() {
   onScan();
   setInterval(onScan, 2000);
 }
-watcher();
+// watcher();
+onScan();
