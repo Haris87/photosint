@@ -20,7 +20,7 @@
     "default_icon": {
       "128": "src/icons/icon_128.png"
     },
-    "default_popup": "index.html"
+    "default_popup": "popup.html"
   },
   "icons": {
     "16": "src/icons/icon_16.png",

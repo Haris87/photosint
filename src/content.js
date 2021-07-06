@@ -189,12 +189,12 @@ export function extractExifData(image) {
           }
         },
         function (err) {
-          console.warn("Exif get data error:", err);
+          // console.warn("Exif get data error:", err);
           reject(err);
         }
       );
     } catch (e) {
-      console.warn("Exif get data error:", e);
+      // console.warn("Exif get data error:", e);
       reject(e);
     }
   });
@@ -253,25 +253,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 /**
- * When image with found, check for EXIF and extract, notify background
- */
-target.on("image-found", (event) => {
-  // console.log("event", event);
-  checkImage(event.node).then((image) => {
-    images.push(image);
-    images = removeDuplicateImages();
-    updateIconNotification();
-  });
-});
-
-/**
- * After all images are loaded, update notification count
- */
-eventImagesLoaded().then(() => {
-  updateIconNotification();
-});
-
-/**
  * Check images when they enter veiwport
  */
 document.getElementsByTagName("body")[0].addEventListener("load", function () {
@@ -284,6 +265,26 @@ document.getElementsByTagName("body")[0].addEventListener("load", function () {
     exit: function (el) {
       // console.log("IMAGE LEFT");
     },
+  });
+
+  /**
+   * When image with found, check for EXIF and extract, notify background
+   */
+
+  /**
+   * After all images are loaded, update notification count
+   */
+  eventImagesLoaded().then(() => {
+    updateIconNotification();
+  });
+});
+
+target.on("image-found", (event) => {
+  // console.log("event", event);
+  checkImage(event.node).then((image) => {
+    images.push(image);
+    images = removeDuplicateImages();
+    updateIconNotification();
   });
 });
 

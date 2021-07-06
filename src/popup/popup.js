@@ -5,7 +5,9 @@ export function createCardNode(imgUrl, exif) {
   const filename = getFilename(imgUrl);
   const domain = getDomain(imgUrl);
 
-  let card = `<div class="card mb-3" style="max-width: 540px;">
+  let card = `<div class="card mb-3" id="${btoa(
+    imgUrl
+  )}" style="max-width: 540px;">
     <div class="row g-0">
         <div class="col-md-4">
         <img src="${imgUrl}" class="img-fluid rounded mx-auto d-block" alt="..."/>
@@ -130,15 +132,20 @@ export function appendImages(_images) {
   if (_images) {
     _images
       .filter((i) => {
-        if (urls.indexOf(i.url) == -1) {
+        if (urls.indexOf(i.url) === -1) {
           urls.push(i.url);
+          console.log(
+            "array",
+            JSON.parse(JSON.stringify(urls)),
+            JSON.parse(JSON.stringify(_images))
+          );
           return i;
         }
       })
       .forEach((i) => {
         appendCard(i.url, i.metadata);
+        updateCount();
       });
-    updateCount();
   }
 }
 
@@ -154,5 +161,4 @@ export function watcher() {
   onScan();
   setInterval(onScan, 2000);
 }
-// watcher();
-onScan();
+watcher();

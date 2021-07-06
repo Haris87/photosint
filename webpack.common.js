@@ -17,7 +17,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
-    new HtmlWebpackPlugin({ template: "src/popup/popup.html" }),
+    // new HtmlWebpackPlugin({ template: "src/popup/popup.html" }),
     new CopyWebpackPlugin({
       patterns: [
         { from: "./src/manifest.json" },
@@ -25,6 +25,7 @@ module.exports = {
         { from: "./src/styles/*" },
         { from: "./src/libs/*" },
         { from: "./src/popup/popup.css" },
+        { from: "./src/popup/popup.html" },
       ],
     }),
   ],
