@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack --watch --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "test": "mocha --require @babel/register"
+    "test": "mocha --timeout 15000 --require @babel/register",
+    "test-with-coverage": "nyc npm run test"
   },
   "keywords": [],
   "author": "",
