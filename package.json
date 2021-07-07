@@ -7,7 +7,8 @@
     "start": "webpack --watch --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "test": "mocha --timeout 15000 --require @babel/register",
-    "test-with-coverage": "nyc npm run test"
+    "test-with-coverage": "nyc npm run test",
+    "deploy": "CLIENT_ID=${CLIENT_ID} CLIENT_SECRET=${CLIENT_SECRET} REFRESH_TOKEN=${REFRESH_TOKEN} EXTENSION_ID=${EXTENSION_ID} node deploy.js"
   },
   "keywords": [],
   "author": "",
