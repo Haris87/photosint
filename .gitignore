@@ -1,3 +1,5 @@
 node_modules
 dist
+photosint.zip
 .nyc_output
+.env
