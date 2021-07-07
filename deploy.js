@@ -10,12 +10,12 @@ let EXTENSION_ID = process.env.EXTENSION_ID;
 let CLIENT_SECRET = process.env.CLIENT_SECRET;
 let CLIENT_ID = process.env.CLIENT_ID;
 
-// const webStore = require("chrome-webstore-upload")({
-//   extensionId: EXTENSION_ID,
-//   clientId: CLIENT_ID,
-//   clientSecret: CLIENT_SECRET,
-//   refreshToken: REFRESH_TOKEN,
-// });
+const webStore = require("chrome-webstore-upload")({
+  extensionId: EXTENSION_ID,
+  clientId: CLIENT_ID,
+  clientSecret: CLIENT_SECRET,
+  refreshToken: REFRESH_TOKEN,
+});
 
 // zipping the output folder
 zipFolder(folder, zipName, function (err) {
@@ -24,7 +24,7 @@ zipFolder(folder, zipName, function (err) {
     process.exit(1);
   } else {
     console.log(`Successfully Zipped ${folder} and saved as ${zipName}`);
-    //uploadZip(); // on successful zipping, call upload
+    uploadZip(); // on successful zipping, call upload
   }
 });
 
