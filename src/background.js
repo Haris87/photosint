@@ -1,6 +1,36 @@
 const state = {};
 let currentTab;
 
+function getTineyeHash(imgUrl) {
+  const data = new URLSearchParams();
+  data.append("url", imgUrl);
+
+  return fetch("https://tineye.com/result_json/", {
+    method: "POST",
+    body: data,
+  })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (response) {
+      console.log(response);
+      const hash = response.query_hash;
+      return hash;
+    });
+}
+
+function reverseImageSearchTineye(info, tab) {
+  getTineyeHash(info.srcUrl)
+    .then((hash) => {
+      chrome.tabs.create({
+        url: `https://tineye.com/search/${hash}?sort=crawl_date&order=asc&page=1`,
+      });
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
+}
+
 function reverseImageSearchGoogle(info, tab) {
   chrome.tabs.create({
     url: "https://images.google.com/searchbyimage?image_url=" + info.srcUrl,
@@ -33,6 +63,7 @@ function reverseImageSearchAll(info, tab) {
   reverseImageSearchBing(info, tab);
   reverseImageSearchYandex(info, tab);
   reverseImageSearchGoogle(info, tab);
+  reverseImageSearchTineye(info, tab);
 }
 
 function showNotificationOnIcon(count) {
@@ -91,7 +122,7 @@ function onInstalled() {
   // console.log("installed");
   chrome.contextMenus.create({
     id: "reverse-image-search",
-    title: "Reverse image search (Google, Bing, Yandex)",
+    title: "Reverse image search (Google, Bing, Yandex, TinEye)",
     contexts: ["image"],
     // onclick: reverseImageSearchAll,
   });
