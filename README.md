@@ -4,7 +4,12 @@
 
 OSINT tool for images.
 
-Chrome extension that checks all images _while browsing_ for EXIF data. Also gives context options for reverse image search in different search engines.
+Chrome extension that checks all images in a webpage, _while browsing_, for EXIF data, and presents found images with their EXIF in the popup window. Also gives context options for reverse image search in different search engines.
+With one click you can reverse image search in:
+- Google
+- Yandex
+- Bing
+- TinEye
 
 You can download the extension from the [chrome web store](https://chrome.google.com/webstore/detail/photosint/gonhdjmkgfkokhkflfhkbiagbmoolhcd)
 
