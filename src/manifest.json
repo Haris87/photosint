@@ -1,6 +1,6 @@
 {
   "name": "PhotOSINT",
-  "version": "0.3.4.0",
+  "version": "0.3.4.1",
   "description": "OSINT tool for images. Scans page for images with EXIF metadata, while browsing. Also has context menu options for images.",
   "manifest_version": 3,
   "background": {
