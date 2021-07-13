@@ -68,9 +68,9 @@ function reverseImageSearchAll(info, tab) {
 
 function showNotificationOnIcon(count) {
   let text = count > 0 ? String(count) : "";
-  if (count > 10) text = "10+";
+  if (count > 9) text = "9+";
 
-  chrome.action.setBadgeBackgroundColor({ color: "#d00" }, () => {
+  chrome.action.setBadgeBackgroundColor({ color: "#00acce" }, () => {
     chrome.action.setBadgeText({ text: text });
   });
 }
