@@ -70,7 +70,7 @@ function showNotificationOnIcon(count) {
   let text = count > 0 ? String(count) : "";
   if (count > 10) text = "10+";
 
-  chrome.action.setBadgeBackgroundColor({ color: "#F90" }, () => {
+  chrome.action.setBadgeBackgroundColor({ color: "#d00" }, () => {
     chrome.action.setBadgeText({ text: text });
   });
 }
